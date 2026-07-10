@@ -1,0 +1,25 @@
+{
+  "name": "ha-bms-battery-cell-card",
+  "version": "1.0.0",
+  "description": "Home Assistant Lovelace card for monitoring a LiFePO4 battery pack (per-cell voltages, balancing, SOC, power, charge mode, capacity, temperature, cycles).",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bb12489/ha-bms-card.git"
+  },
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "dev": "vite build --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "custom-card-helpers": "^1.9.0",
+    "lit": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.10"
+  }
+}

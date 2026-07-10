@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f0eee9;font-family:'Roboto',sans-serif}
+</style>
+</helmet>
+
+<sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+<div style="background:#fafafa;border-radius:14px;padding:20px;width:{{ cardOuterWidth }}px;box-sizing:border-box">
+  <div style="background:#fff;border-radius:12px;box-shadow:0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);color:#212121;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 4px;background:linear-gradient(180deg,{{ socHeaderTint }},rgba(0,0,0,0))">
+      <div style="width:34px;height:34px;border-radius:50%;background:{{ socIconBg }};display:flex;align-items:center;justify-content:center;flex:none">
+        <div style="width:14px;height:20px;border:2px solid {{ socIconColor }};border-radius:2px;position:relative">
+          <div style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:7px;height:3px;background:{{ socIconColor }};border-radius:1px 1px 0 0"></div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:500;line-height:1.3">Battery Bank</div>
+        <div style="font-size:12px;color:rgba(0,0,0,.6)">LiFePO4 · {{ cellCountLabel }}</div>
+      </div>
+      <div style="font-size:13px;font-weight:600;background:{{ socChipBg }};color:{{ socChipColor }};padding:4px 10px;border-radius:12px;flex:none">{{ packSocLabel }}</div>
+      <div style="color:rgba(0,0,0,.35);font-size:18px;line-height:1;cursor:pointer;flex:none">⋮</div>
+    </div>
+    <div style="display:flex;gap:8px;padding:2px 16px 10px">
+      <div style="display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.045);border-radius:8px;padding:4px 10px;font-size:11.5px;font-weight:600">⚡ {{ powerLabel }} W</div>
+      <div style="display:flex;align-items:center;gap:5px;background:{{ chargeModeBg }};color:{{ chargeModeColor }};border-radius:8px;padding:4px 10px;font-size:11.5px;font-weight:600">{{ chargeMode }}</div>
+    </div>
+    <sc-if value="{{ alarmActive }}" hint-placeholder-val="{{ false }}">
+      <div style="margin:0 16px 8px;padding:7px 10px;background:rgba(244,67,54,.1);border:1px solid rgba(244,67,54,.3);border-radius:8px;font-size:11px;color:#c62828;font-weight:500">⚠ {{ alarmText }}</div>
+    </sc-if>
+    <div style="display:flex;justify-content:center;padding:4px 16px 6px">
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:{{ cellGap }}px;width:{{ cellsRowWidth }}px">
+        <sc-for list="{{ cells }}" as="c" hint-placeholder-count="16">
+          <div onClick="{{ c.onClick }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;width:{{ cellBarW }}px;cursor:pointer">
+            <div style="font:600 {{ cellFont }}px ui-monospace,Menlo,monospace;color:#212121;height:{{ cellFont }}px">{{ c.v }}</div>
+            <div style="font-size:{{ cellBadgeFont }}px;line-height:1;height:{{ cellBadgeFont }}px;color:{{ c.badgeColor }}">{{ c.badge }}</div>
+            <div style="width:{{ cellBarW }}px;height:{{ cellBarH }}px;background:rgba(0,0,0,.06);border-radius:6px;position:relative;overflow:hidden;border:{{ c.border }}">
+              <div style="position:absolute;left:0;right:0;bottom:0;height:{{ c.heightPct }}%;background:{{ c.color }};border-radius:6px 6px 2px 2px"></div>
+            </div>
+            <div style="font-size:{{ cellLabelFont }}px;color:rgba(0,0,0,.45)">{{ c.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ hasExpanded }}" hint-placeholder-val="{{ false }}">
+      <div style="margin:0 16px 10px;padding:9px 11px;background:rgba(0,0,0,.035);border:1px solid rgba(0,0,0,.1);border-radius:8px;font-size:11.5px;display:flex;flex-direction:column;gap:2px">
+        <div style="font-weight:600">{{ expandedDetail.title }}</div>
+        <div style="color:rgba(0,0,0,.6)">{{ expandedDetail.line1 }}</div>
+        <div style="color:rgba(0,0,0,.6)">{{ expandedDetail.line2 }}</div>
+      </div>
+    </sc-if>
+    <div style="height:1px;background:rgba(0,0,0,.08);margin:6px 16px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;padding:8px 16px 16px">
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Pack voltage</span><b>{{ packVoltageLabel }} V</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Deviation</span><b>{{ deviationLabel }} V</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Current</span><b>{{ currentLabel }} A</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Remaining</span><b>{{ remainingCapacityAh }} Ah</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Temp</span><b>87.8°F</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Installed</span><b>{{ installedCapacityAh }} Ah</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Cycles</span><b>548</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:11.5px"><span style="color:rgba(0,0,0,.55)">Since full charge</span><b>{{ sinceFullChargeLabel }}</b></div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+<div style="background:#111111;border-radius:14px;padding:20px;width:{{ cardOuterWidth }}px;box-sizing:border-box">
+  <div style="background:#1c1c1c;border-radius:12px;box-shadow:0 2px 1px -1px rgba(0,0,0,.5),0 1px 1px 0 rgba(0,0,0,.4),0 1px 3px 0 rgba(0,0,0,.35);color:#e1e1e1;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 4px;background:linear-gradient(180deg,{{ socHeaderTintDark }},rgba(0,0,0,0))">
+      <div style="width:34px;height:34px;border-radius:50%;background:{{ socIconBgDark }};display:flex;align-items:center;justify-content:center;flex:none">
+        <div style="width:14px;height:20px;border:2px solid {{ socIconColor }};border-radius:2px;position:relative">
+          <div style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:7px;height:3px;background:{{ socIconColor }};border-radius:1px 1px 0 0"></div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;font-weight:500;line-height:1.3">Battery Bank</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6)">LiFePO4 · {{ cellCountLabel }}</div>
+      </div>
+      <div style="font-size:13px;font-weight:600;background:{{ socChipBgDark }};color:{{ socChipColor }};padding:4px 10px;border-radius:12px;flex:none">{{ packSocLabel }}</div>
+      <div style="color:rgba(255,255,255,.35);font-size:18px;line-height:1;cursor:pointer;flex:none">⋮</div>
+    </div>
+    <div style="display:flex;gap:8px;padding:2px 16px 10px">
+      <div style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.06);border-radius:8px;padding:4px 10px;font-size:11.5px;font-weight:600">⚡ {{ powerLabel }} W</div>
+      <div style="display:flex;align-items:center;gap:5px;background:{{ chargeModeBgDark }};color:{{ chargeModeColor }};border-radius:8px;padding:4px 10px;font-size:11.5px;font-weight:600">{{ chargeMode }}</div>
+    </div>
+    <sc-if value="{{ alarmActive }}" hint-placeholder-val="{{ false }}">
+      <div style="margin:0 16px 8px;padding:7px 10px;background:rgba(244,67,54,.16);border:1px solid rgba(244,67,54,.4);border-radius:8px;font-size:11px;color:#ff8a80;font-weight:500">⚠ {{ alarmText }}</div>
+    </sc-if>
+    <div style="display:flex;justify-content:center;padding:4px 16px 6px">
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:{{ cellGap }}px;width:{{ cellsRowWidth }}px">
+        <sc-for list="{{ cells }}" as="c" hint-placeholder-count="16">
+          <div onClick="{{ c.onClick }}" style="display:flex;flex-direction:column;align-items:center;gap:4px;width:{{ cellBarW }}px;cursor:pointer">
+            <div style="font:600 {{ cellFont }}px ui-monospace,Menlo,monospace;color:#e1e1e1;height:{{ cellFont }}px">{{ c.v }}</div>
+            <div style="font-size:{{ cellBadgeFont }}px;line-height:1;height:{{ cellBadgeFont }}px;color:{{ c.badgeColor }}">{{ c.badge }}</div>
+            <div style="width:{{ cellBarW }}px;height:{{ cellBarH }}px;background:rgba(255,255,255,.08);border-radius:6px;position:relative;overflow:hidden;border:{{ c.borderDark }}">
+              <div style="position:absolute;left:0;right:0;bottom:0;height:{{ c.heightPct }}%;background:{{ c.color }};border-radius:6px 6px 2px 2px"></div>
+            </div>
+            <div style="font-size:{{ cellLabelFont }}px;color:rgba(255,255,255,.4)">{{ c.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ hasExpanded }}" hint-placeholder-val="{{ false }}">
+      <div style="margin:0 16px 10px;padding:9px 11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;font-size:11.5px;display:flex;flex-direction:column;gap:2px">
+        <div style="font-weight:600">{{ expandedDetail.title }}</div>
+        <div style="color:rgba(255,255,255,.65)">{{ expandedDetail.line1 }}</div>
+        <div style="color:rgba(255,255,255,.65)">{{ expandedDetail.line2 }}</div>
+      </div>
+    </sc-if>
+    <div style="height:1px;background:rgba(255,255,255,.12);margin:6px 16px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;padding:8px 16px 16px">
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Pack voltage</span><b>{{ packVoltageLabel }} V</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Deviation</span><b>{{ deviationLabel }} V</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Current</span><b>{{ currentLabel }} A</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Remaining</span><b>{{ remainingCapacityAh }} Ah</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Temp</span><b>87.8°F</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Installed</span><b>{{ installedCapacityAh }} Ah</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Cycles</span><b>548</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:11.5px"><span style="color:rgba(255,255,255,.6)">Since full charge</span><b>{{ sinceFullChargeLabel }}</b></div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480},&quot;packSoc&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:100,&quot;min&quot;:1,&quot;max&quot;:100,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Battery state&quot;},&quot;alarmActive&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Battery state&quot;},&quot;chargeMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Float&quot;,&quot;options&quot;:[&quot;Bulk&quot;,&quot;Absorption&quot;,&quot;Float&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Battery state&quot;},&quot;cellCount&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:8,&quot;options&quot;:[4,8,16],&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;layoutMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;single-row&quot;,&quot;options&quot;:[&quot;single-row&quot;,&quot;two-row&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;darkMode&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Appearance&quot;},&quot;gradientEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Cell coloring&quot;},&quot;socWarmColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#FF7043&quot;,&quot;options&quot;:[&quot;#FFB74D&quot;,&quot;#FFA726&quot;,&quot;#FF7043&quot;,&quot;#EC407A&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cell coloring&quot;},&quot;socCoolColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#66BB6A&quot;,&quot;options&quot;:[&quot;#26C6DA&quot;,&quot;#42A5F5&quot;,&quot;#66BB6A&quot;,&quot;#26A69A&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cell coloring&quot;},&quot;flatCellColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#66BB6A&quot;,&quot;options&quot;:[&quot;#42A5F5&quot;,&quot;#26A69A&quot;,&quot;#7E57C2&quot;,&quot;#66BB6A&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cell coloring&quot;}}">
+// 8S default mirrors a real SerialBattery (EG4 LifePower) pack at rest — a
+// tightly balanced LiFePO4 stack sits within a few mV, so bars read as nearly
+// flat by design; per-cell numbers + deviation stat carry the fine detail.
+const DATASETS = {
+  8:  [3.407,3.406,3.405,3.405,3.406,3.407,3.406,3.402],
+  16: [3.42,3.43,3.41,3.40,3.44,3.42,3.30,3.41,3.43,3.42,3.41,3.58,3.42,3.41,3.40,3.43],
+  4:  [3.41,3.30,3.58,3.43]
+};
+// LiFePO4 cell range spans ~2.90V (near-empty knee) to ~3.65V (near-full knee).
+const SCALE_MIN = 2.90, SCALE_MAX = 3.65;
+const WARN_LOW = 3.00, WARN_HIGH = 3.55;
+
+// Bar sizing keyed by how many cells sit in a single row — fewer per row means
+// more room, so bars grow to use it.
+const SIZING = {
+  16: { barW: 20, gap: 3,  barH: 72,  font: 8,   badgeFont: 7,   labelFont: 7.5 },
+  8:  { barW: 34, gap: 8,  barH: 94,  font: 11,  badgeFont: 9,   labelFont: 9.5 },
+  4:  { barW: 54, gap: 16, barH: 116, font: 13,  badgeFont: 11,  labelFont: 11 },
+  2:  { barW: 84, gap: 24, barH: 140, font: 15,  badgeFont: 12,  labelFont: 12.5 }
+};
+
+function pctFor(v){ return ((v - SCALE_MIN) / (SCALE_MAX - SCALE_MIN)) * 100; }
+function lerp(a,b,t){ return a + (b - a) * t; }
+function statusOf(v){ if (v <= WARN_LOW) return 'low'; if (v >= WARN_HIGH) return 'high'; return 'ok'; }
+
+// Danger zones stay pure, fixed colors — an at-risk cell must always pop, never
+// fade toward gray by blending with an unrelated hue. Only "ok" cells (inside
+// the warn thresholds) take the SOC-tinted color, with a light shade variance
+// by relative voltage so per-cell differences still read within that band.
+const STATUS_LOW = [244,67,54];
+const STATUS_HIGH = [255,152,0];
+function hexToRgb(hex){
+  const h = hex.replace('#','');
+  return [0,2,4].map(i => parseInt(h.substring(i, i+2), 16));
+}
+function socMidRgb(soc, warmRgb, coolRgb){
+  const t = Math.max(0, Math.min(100, soc)) / 100;
+  return [0,1,2].map(i => Math.round(lerp(warmRgb[i], coolRgb[i], t)));
+}
+function shade(rgb, factor){
+  return rgb.map(c => Math.max(0, Math.min(255, Math.round(c * factor))));
+}
+function cellColor(v, pct, soc, gradientEnabled, warmRgb, coolRgb, flatRgb){
+  const status = statusOf(v);
+  if (status === 'low') return `rgb(${STATUS_LOW.join(',')})`;
+  if (status === 'high') return `rgb(${STATUS_HIGH.join(',')})`;
+  const mid = gradientEnabled ? socMidRgb(soc, warmRgb, coolRgb) : flatRgb;
+  const t = Math.max(0, Math.min(1, (pct - 33) / (77 - 33)));
+  const factor = lerp(0.88, 1.1, t);
+  return `rgb(${shade(mid, factor).join(',')})`;
+}
+
+class Component extends DCLogic {
+  state = { expandedIdx: null };
+
+  renderVals() {
+    const packSoc = this.props.packSoc ?? 82;
+    const dark = !!this.props.darkMode;
+    const gradientEnabled = this.props.gradientEnabled ?? true;
+    const warmRgb = hexToRgb(this.props.socWarmColor || '#FFB74D');
+    const coolRgb = hexToRgb(this.props.socCoolColor || '#26C6DA');
+    const flatRgb = hexToRgb(this.props.flatCellColor || '#42A5F5');
+    const cellCount = [4,8,16].includes(this.props.cellCount) ? this.props.cellCount : 8;
+    const alarmActive = !!this.props.alarmActive;
+    const layoutMode = this.props.layoutMode === 'two-row' ? 'two-row' : 'single-row';
+    const RAW = DATASETS[cellCount];
+    const AVG = RAW.reduce((a,b)=>a+b,0) / RAW.length;
+    const MIN_IDX = RAW.indexOf(Math.min(...RAW));
+    const MAX_IDX = RAW.indexOf(Math.max(...RAW));
+
+    const cellsPerRow = layoutMode === 'two-row' ? cellCount / 2 : cellCount;
+    const sizing = SIZING[cellsPerRow] || SIZING[16];
+    const cellsRowWidth = cellsPerRow * sizing.barW + (cellsPerRow - 1) * sizing.gap;
+    const cardOuterWidth = cellsRowWidth + 32 + 40; // card padding + dashboard padding
+
+    const cells = RAW.map((v, i) => {
+      const pct = pctFor(v);
+      const expanded = this.state.expandedIdx === i;
+      return {
+        label: 'C' + (i+1),
+        v: v.toFixed(2) + 'V',
+        heightPct: pct,
+        color: cellColor(v, pct, packSoc, gradientEnabled, warmRgb, coolRgb, flatRgb),
+        badge: i === MIN_IDX ? '▼' : (i === MAX_IDX ? '▲' : ''),
+        badgeColor: i === MIN_IDX ? '#f44336' : (i === MAX_IDX ? '#ff9800' : 'transparent'),
+        border: expanded ? '2px solid #26a69a' : '1px solid rgba(0,0,0,.08)',
+        borderDark: expanded ? '2px solid #26a69a' : '1px solid rgba(255,255,255,.14)',
+        onClick: () => this.setState(s => ({ expandedIdx: s.expandedIdx === i ? null : i }))
+      };
+    });
+
+    const hasExpanded = this.state.expandedIdx !== null;
+    let expandedDetail = null;
+    if (hasExpanded) {
+      const i = this.state.expandedIdx;
+      const v = RAW[i];
+      const deltaMv = Math.round((v - AVG) * 1000);
+      const rank = i === MIN_IDX ? 'Lowest cell in pack' : (i === MAX_IDX ? 'Highest cell in pack — actively balancing' : 'Within normal range');
+      expandedDetail = {
+        title: `Cell ${i+1} · ${v.toFixed(3)} V`,
+        line1: `${deltaMv >= 0 ? '+' : ''}${deltaMv} mV from pack average`,
+        line2: rank
+      };
+    }
+
+    const midRgb = gradientEnabled ? socMidRgb(packSoc, warmRgb, coolRgb) : flatRgb;
+    const socMidCss = `rgb(${midRgb[0]},${midRgb[1]},${midRgb[2]})`;
+    const [mr, mg, mb] = midRgb;
+
+    const packVoltage = RAW.reduce((a,b) => a+b, 0);
+    const deviationV = (Math.max(...RAW) - Math.min(...RAW)).toFixed(3);
+    const alarmCellIdx = MAX_IDX;
+    const alarmText = `High cell voltage — C${alarmCellIdx+1} exceeds ${WARN_HIGH.toFixed(2)} V`;
+    const currentA = 0.0;
+    const powerW = currentA * packVoltage;
+    const installedCapacityAh = 182.4;
+    const remainingCapacityAh = 175.1;
+    const secondsSinceFullCharge = 216205;
+    const daysSince = Math.floor(secondsSinceFullCharge / 86400);
+    const hoursSince = Math.floor((secondsSinceFullCharge % 86400) / 3600);
+    const sinceFullChargeLabel = `${daysSince}d ${hoursSince}h`;
+    const chargeMode = ['Bulk','Absorption','Float'].includes(this.props.chargeMode) ? this.props.chargeMode : 'Float';
+    const CHARGE_MODE_COLOR = { Bulk: '#ff9800', Absorption: '#42a5f5', Float: '#4caf50' };
+    const chargeModeColor = CHARGE_MODE_COLOR[chargeMode];
+
+    return {
+      isLight: !dark,
+      isDark: dark,
+      cells,
+      hasExpanded, expandedDetail,
+      packSocLabel: Math.round(packSoc) + '%',
+      cellCountLabel: cellCount + 'S',
+      packVoltageLabel: packVoltage.toFixed(2),
+      deviationLabel: deviationV,
+      alarmActive,
+      alarmText,
+      powerLabel: powerW.toFixed(1),
+      currentLabel: currentA.toFixed(1),
+      installedCapacityAh,
+      remainingCapacityAh,
+      sinceFullChargeLabel,
+      chargeMode,
+      chargeModeColor,
+      chargeModeBg: chargeModeColor + '22',
+      chargeModeBgDark: chargeModeColor + '33',
+      cardOuterWidth,
+      cellsRowWidth,
+      cellBarW: sizing.barW,
+      cellBarH: sizing.barH,
+      cellGap: sizing.gap,
+      cellFont: sizing.font,
+      cellBadgeFont: sizing.badgeFont,
+      cellLabelFont: sizing.labelFont,
+      socIconColor: socMidCss,
+      socIconBg: `rgba(${mr},${mg},${mb},.14)`,
+      socChipColor: socMidCss,
+      socChipBg: `rgba(${mr},${mg},${mb},.14)`,
+      socHeaderTint: `rgba(${mr},${mg},${mb},.10)`,
+      socIconBgDark: `rgba(${mr},${mg},${mb},.22)`,
+      socChipBgDark: `rgba(${mr},${mg},${mb},.22)`,
+      socHeaderTintDark: `rgba(${mr},${mg},${mb},.16)`
+    };
+  }
+}
+
+</script>
+</body>
+</html>
