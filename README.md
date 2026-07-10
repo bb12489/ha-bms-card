@@ -130,9 +130,16 @@ npm run build    # type-checks and bundles to dist/battery-cell-card.js
 npm run dev       # rebuild on change
 ```
 
+`dist/battery-cell-card.js` is committed to the repo (not gitignored) —
+HACS's plugin-category validator requires the built bundle to be present in
+the repo tree, and this is what gets served to installs that pull straight
+from `main` rather than a release. **Run `npm run build` and commit the
+result whenever `src/` changes; CI fails the build if the committed bundle
+doesn't match a fresh build.**
+
 Cutting a release (`git tag vX.Y.Z && git push --tags`) triggers CI to build
-and attach `battery-cell-card.js` to the GitHub Release, which is what HACS
-installs.
+and attach `battery-cell-card.js` to the GitHub Release too, which HACS
+prefers over the repo copy when one exists.
 
 ## Design provenance
 
