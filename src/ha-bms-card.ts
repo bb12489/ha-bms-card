@@ -381,10 +381,15 @@ export class HaBmsCard extends LitElement {
       : "";
 
     const chargeModeState = this._state(cfg.charge_mode_entity);
-    const chargeModeColor =
-      chargeModeState && (CHARGE_MODES as string[]).includes(chargeModeState)
-        ? CHARGE_MODE_COLOR[chargeModeState as (typeof CHARGE_MODES)[number]]
-        : "#9e9e9e";
+    // Match case-insensitively - BMS integrations commonly report the mode
+    // as lowercase ("bulk"/"absorption"/"float") rather than the design's
+    // capitalized labels, and an exact-case match would silently fall back
+    // to the neutral gray color for those.
+    const chargeModeCanonical = chargeModeState
+      ? CHARGE_MODES.find((mode) => mode.toLowerCase() === chargeModeState.toLowerCase())
+      : undefined;
+    const chargeModeColor = chargeModeCanonical ? CHARGE_MODE_COLOR[chargeModeCanonical] : "#9e9e9e";
+    const chargeModeLabel = chargeModeCanonical ?? chargeModeState;
 
     const expandedDetail = this._expandedDetail(cells, avg);
 
@@ -420,7 +425,7 @@ export class HaBmsCard extends LitElement {
                 class="pill"
                 style="background:${chargeModeColor}${theme.chargeModeAlpha};color:${chargeModeColor};"
               >
-                ${chargeModeState}
+                ${chargeModeLabel}
               </div>`
             : nothing}
         </div>
