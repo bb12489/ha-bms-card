@@ -178,12 +178,6 @@ export class HaBmsCard extends LitElement {
       border-radius: 12px;
       flex: none;
     }
-    .kebab {
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-      flex: none;
-    }
     .badges-row {
       display: flex;
       gap: 8px;
@@ -410,14 +404,21 @@ export class HaBmsCard extends LitElement {
             <div class="title">${cfg.name || "Battery Bank"}</div>
             <div class="subtitle" style="color:${theme.subtitleText};">LiFePO4 · ${cellCount}S</div>
           </div>
-          <div class="soc-chip" style="background:${rgbaCss(midRgb, theme.socChipBgAlpha)};color:${socColorCss};">
+          <div
+            class="soc-chip"
+            style="background:${rgbaCss(midRgb, theme.socChipBgAlpha)};color:${socColorCss};cursor:pointer;"
+            @click=${(ev: Event) => this._openMoreInfo(ev, cfg.soc_entity)}
+          >
             ${Math.round(packSoc)}%
           </div>
-          <div class="kebab" style="color:${theme.kebabText};" @click=${this._handleMoreInfo}>⋮</div>
         </div>
 
         <div class="badges-row">
-          <div class="pill" style="background:${theme.powerPillBg};color:${theme.primaryText};">
+          <div
+            class="pill"
+            style="background:${theme.powerPillBg};color:${theme.primaryText};${cfg.power_entity ? "cursor:pointer;" : ""}"
+            @click=${(ev: Event) => this._openMoreInfo(ev, cfg.power_entity)}
+          >
             ⚡ ${powerW !== null ? powerW.toFixed(1) : "--"} W
           </div>
           ${chargeModeState
@@ -489,17 +490,44 @@ export class HaBmsCard extends LitElement {
         <div class="divider" style="background:${theme.hairlineMain};"></div>
 
         <div class="stats-grid">
-          ${this._statRow("Pack voltage", `${packVoltage.toFixed(2)} V`, theme)}
-          ${this._statRow("Deviation", `${formatDeviation(deviation)} V`, theme)}
-          ${this._statRow("Current", currentA !== null ? `${currentA.toFixed(1)} A` : "--", theme)}
-          ${this._statRow("Remaining", remainingAh !== null ? `${remainingAh.toFixed(1)} Ah` : "--", theme)}
-          ${this._statRow("Temp", tempState !== null ? `${tempState}${tempUnit}` : "--", theme)}
-          ${this._statRow("Installed", installedAh !== null ? `${installedAh.toFixed(1)} Ah` : "--", theme)}
-          ${this._statRow("Cycles", cycles !== null ? `${Math.round(cycles)}` : "--", theme, true)}
+          ${this._statRow("Pack voltage", `${packVoltage.toFixed(2)} V`, theme, cfg.pack_voltage_entity)}
+          ${this._statRow("Deviation", `${formatDeviation(deviation)} V`, theme, cfg.deviation_entity)}
+          ${this._statRow(
+            "Current",
+            currentA !== null ? `${currentA.toFixed(1)} A` : "--",
+            theme,
+            cfg.current_entity
+          )}
+          ${this._statRow(
+            "Remaining",
+            remainingAh !== null ? `${remainingAh.toFixed(1)} Ah` : "--",
+            theme,
+            cfg.capacity_remaining_entity
+          )}
+          ${this._statRow(
+            "Temp",
+            tempState !== null ? `${tempState}${tempUnit}` : "--",
+            theme,
+            cfg.temperature_entity
+          )}
+          ${this._statRow(
+            "Installed",
+            installedAh !== null ? `${installedAh.toFixed(1)} Ah` : "--",
+            theme,
+            cfg.capacity_installed_entity
+          )}
+          ${this._statRow(
+            "Cycles",
+            cycles !== null ? `${Math.round(cycles)}` : "--",
+            theme,
+            cfg.cycles_entity,
+            true
+          )}
           ${this._statRow(
             "Since full charge",
             sinceFullChargeSeconds !== null ? formatSinceFullCharge(sinceFullChargeSeconds) : "--",
             theme,
+            cfg.since_full_charge_entity,
             true
           )}
         </div>
@@ -507,10 +535,17 @@ export class HaBmsCard extends LitElement {
     `;
   }
 
-  private _statRow(label: string, value: string, theme: ThemeTokens, noBorder = false) {
+  private _statRow(
+    label: string,
+    value: string,
+    theme: ThemeTokens,
+    entityId?: string,
+    noBorder = false
+  ) {
     return html`<div
       class="stat-row"
-      style="${noBorder ? "" : `border-bottom:1px solid ${theme.hairlineStat};`}"
+      style="${noBorder ? "" : `border-bottom:1px solid ${theme.hairlineStat};`}${entityId ? "cursor:pointer;" : ""}"
+      @click=${(ev: Event) => this._openMoreInfo(ev, entityId)}
     >
       <span style="color:${theme.statLabelText};">${label}</span>
       <b>${value}</b>
@@ -525,7 +560,6 @@ export class HaBmsCard extends LitElement {
           subtitleText: "rgba(255,255,255,.6)",
           statLabelText: "rgba(255,255,255,.6)",
           cellIndexText: "rgba(255,255,255,.4)",
-          kebabText: "rgba(255,255,255,.35)",
           cardShadow: "0 2px 1px -1px rgba(0,0,0,.5),0 1px 1px 0 rgba(0,0,0,.4),0 1px 3px 0 rgba(0,0,0,.35)",
           hairlineMain: "rgba(255,255,255,.12)",
           hairlineStat: "rgba(255,255,255,.08)",
@@ -549,7 +583,6 @@ export class HaBmsCard extends LitElement {
           subtitleText: "rgba(0,0,0,.6)",
           statLabelText: "rgba(0,0,0,.55)",
           cellIndexText: "rgba(0,0,0,.45)",
-          kebabText: "rgba(0,0,0,.35)",
           cardShadow: "0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12)",
           hairlineMain: "rgba(0,0,0,.08)",
           hairlineStat: "rgba(0,0,0,.06)",
@@ -694,9 +727,8 @@ export class HaBmsCard extends LitElement {
     this._selectedCellIndex = this._selectedCellIndex === index ? null : index;
   }
 
-  private _handleMoreInfo(ev: Event): void {
+  private _openMoreInfo(ev: Event, entityId?: string): void {
     ev.stopPropagation();
-    const entityId = this._config.soc_entity;
     if (!entityId) return;
     fireEvent(this, "hass-more-info", { entityId });
   }

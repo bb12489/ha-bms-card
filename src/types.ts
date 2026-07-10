@@ -88,7 +88,6 @@ export interface ThemeTokens {
   subtitleText: string;
   statLabelText: string;
   cellIndexText: string;
-  kebabText: string;
   cardShadow: string;
   hairlineMain: string;
   hairlineStat: string;
