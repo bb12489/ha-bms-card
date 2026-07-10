@@ -1,4 +1,4 @@
-# Battery Cell Card
+# HA BMS Card
 
 A Home Assistant Lovelace card for monitoring a LiFePO4 battery pack: per-cell
 voltages, min/max balancing badges, state of charge, power, charge mode,
@@ -9,7 +9,7 @@ Every value is a plain entity mapping in the card config, so it works with
 JK BMS, Victron, ESPHome, and others) — nothing is tied to one specific
 battery or BMS.
 
-![Battery Cell Card - dark theme](screenshots/01-card.png)
+![HA BMS Card - dark theme](screenshots/01-card.png)
 
 <details>
 <summary>More screenshots (light theme, alarm state, 16-cell two-row)</summary>
@@ -42,27 +42,27 @@ battery or BMS.
 
 1. In HACS, go to **Frontend** → the **⋮** menu → **Custom repositories**.
 2. Add this repository URL with category **Dashboard**.
-3. Search for **Battery Cell Card** in HACS and install it.
+3. Search for **HA BMS Card** in HACS and install it.
 4. Add the resource if HACS didn't do so automatically (Settings →
    Dashboards → **⋮** → Resources).
 
 ### Manual
 
-1. Download `battery-cell-card.js` from the
+1. Download `ha-bms-card.js` from the
    [latest release](../../releases/latest).
-2. Copy it to `<config>/www/battery-cell-card.js`.
+2. Copy it to `<config>/www/ha-bms-card.js`.
 3. Add it as a Lovelace resource: Settings → Dashboards → **⋮** →
    **Resources** → **Add Resource**:
-   - URL: `/local/battery-cell-card.js`
+   - URL: `/local/ha-bms-card.js`
    - Resource type: `JavaScript Module`
 
 ## Configuration
 
-Add the card through the dashboard UI (**Add Card** → **Battery Cell Card**)
+Add the card through the dashboard UI (**Add Card** → **HA BMS Card**)
 and pick your entities in the editor, or configure it directly in YAML:
 
 ```yaml
-type: custom:battery-cell-card
+type: custom:ha-bms-card
 name: Battery Bank
 cell_entities:
   - sensor.battery_cell_1_voltage
@@ -126,11 +126,11 @@ not mapped directly).
 
 ```bash
 npm install
-npm run build    # type-checks and bundles to dist/battery-cell-card.js
+npm run build    # type-checks and bundles to dist/ha-bms-card.js
 npm run dev       # rebuild on change
 ```
 
-`dist/battery-cell-card.js` is committed to the repo (not gitignored) —
+`dist/ha-bms-card.js` is committed to the repo (not gitignored) —
 HACS's plugin-category validator requires the built bundle to be present in
 the repo tree, and this is what gets served to installs that pull straight
 from `main` rather than a release. **Run `npm run build` and commit the
@@ -138,13 +138,14 @@ result whenever `src/` changes; CI fails the build if the committed bundle
 doesn't match a fresh build.**
 
 Cutting a release (`git tag vX.Y.Z && git push --tags`) triggers CI to build
-and attach `battery-cell-card.js` to the GitHub Release too, which HACS
+and attach `ha-bms-card.js` to the GitHub Release too, which HACS
 prefers over the repo copy when one exists.
 
 ## Design provenance
 
 This card's visual design (colors, spacing, cell-coloring logic, layout
-breakpoints) comes from a high-fidelity design handoff — see
+breakpoints) comes from a high-fidelity design handoff, originally named
+"Battery Cell Card" before this project settled on the HA BMS Card name — see
 [`design/handoff-readme.md`](design/handoff-readme.md) for the original spec
 and `design/Battery Cell Card.dc.html` for the interactive prototype it was
 implemented from.

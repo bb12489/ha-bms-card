@@ -19,7 +19,7 @@ jobs:
       - run: npm run build
 
       - name: Verify committed dist/ matches a fresh build
-        run: git diff --exit-code -- dist/battery-cell-card.js
+        run: git diff --exit-code -- dist/ha-bms-card.js
 
       - name: HACS validation
         uses: hacs/action@main

@@ -263,8 +263,8 @@ A.elementStyles = [], A.shadowRootOptions = { mode: "open" }, A[O("elementProper
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const ot = globalThis, St = (s) => s, j = ot.trustedTypes, Et = j ? j.createPolicy("lit-html", { createHTML: (s) => s }) : void 0, Nt = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, Dt = "?" + $, _e = `<${Dt}>`, x = document, P = () => x.createComment(""), R = (s) => s === null || typeof s != "object" && typeof s != "function", at = Array.isArray, me = (s) => at(s) || typeof s?.[Symbol.iterator] == "function", J = `[ 	
-\f\r]`, k = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Tt = /-->/g, Mt = />/g, y = RegExp(`>|${J}(?:([^\\s"'>=/]+)(${J}*=${J}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), kt = /'/g, Ot = /"/g, zt = /^(?:script|style|textarea|title)$/i, fe = (s) => (t, ...e) => ({ _$litType$: s, strings: t, values: e }), m = fe(1), C = Symbol.for("lit-noChange"), p = Symbol.for("lit-nothing"), Pt = /* @__PURE__ */ new WeakMap(), b = x.createTreeWalker(x, 129);
+\f\r]`, k = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Tt = /-->/g, Mt = />/g, b = RegExp(`>|${J}(?:([^\\s"'>=/]+)(${J}*=${J}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), kt = /'/g, Ot = /"/g, zt = /^(?:script|style|textarea|title)$/i, fe = (s) => (t, ...e) => ({ _$litType$: s, strings: t, values: e }), m = fe(1), C = Symbol.for("lit-noChange"), p = Symbol.for("lit-nothing"), Pt = /* @__PURE__ */ new WeakMap(), y = x.createTreeWalker(x, 129);
 function Wt(s, t) {
   if (!at(s) || !s.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Et !== void 0 ? Et.createHTML(t) : t;
@@ -275,33 +275,33 @@ const $e = (s, t) => {
   for (let l = 0; l < e; l++) {
     const a = s[l];
     let d, h, c = -1, u = 0;
-    for (; u < a.length && (o.lastIndex = u, h = o.exec(a), h !== null); ) u = o.lastIndex, o === k ? h[1] === "!--" ? o = Tt : h[1] !== void 0 ? o = Mt : h[2] !== void 0 ? (zt.test(h[2]) && (n = RegExp("</" + h[2], "g")), o = y) : h[3] !== void 0 && (o = y) : o === y ? h[0] === ">" ? (o = n ?? k, c = -1) : h[1] === void 0 ? c = -2 : (c = o.lastIndex - h[2].length, d = h[1], o = h[3] === void 0 ? y : h[3] === '"' ? Ot : kt) : o === Ot || o === kt ? o = y : o === Tt || o === Mt ? o = k : (o = y, n = void 0);
-    const _ = o === y && s[l + 1].startsWith("/>") ? " " : "";
+    for (; u < a.length && (o.lastIndex = u, h = o.exec(a), h !== null); ) u = o.lastIndex, o === k ? h[1] === "!--" ? o = Tt : h[1] !== void 0 ? o = Mt : h[2] !== void 0 ? (zt.test(h[2]) && (n = RegExp("</" + h[2], "g")), o = b) : h[3] !== void 0 && (o = b) : o === b ? h[0] === ">" ? (o = n ?? k, c = -1) : h[1] === void 0 ? c = -2 : (c = o.lastIndex - h[2].length, d = h[1], o = h[3] === void 0 ? b : h[3] === '"' ? Ot : kt) : o === Ot || o === kt ? o = b : o === Tt || o === Mt ? o = k : (o = b, n = void 0);
+    const _ = o === b && s[l + 1].startsWith("/>") ? " " : "";
     r += o === k ? a + _e : c >= 0 ? (i.push(d), a.slice(0, c) + Nt + a.slice(c) + $ + _) : a + $ + (c === -2 ? l : _);
   }
   return [Wt(s, r + (s[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), i];
 };
-class B {
+class H {
   constructor({ strings: t, _$litType$: e }, i) {
     let n;
     this.parts = [];
     let r = 0, o = 0;
     const l = t.length - 1, a = this.parts, [d, h] = $e(t, e);
-    if (this.el = B.createElement(d, i), b.currentNode = this.el.content, e === 2 || e === 3) {
+    if (this.el = H.createElement(d, i), y.currentNode = this.el.content, e === 2 || e === 3) {
       const c = this.el.content.firstChild;
       c.replaceWith(...c.childNodes);
     }
-    for (; (n = b.nextNode()) !== null && a.length < l; ) {
+    for (; (n = y.nextNode()) !== null && a.length < l; ) {
       if (n.nodeType === 1) {
         if (n.hasAttributes()) for (const c of n.getAttributeNames()) if (c.endsWith(Nt)) {
           const u = h[o++], _ = n.getAttribute(c).split($), v = /([.?@])?(.*)/.exec(u);
-          a.push({ type: 1, index: r, name: v[2], strings: _, ctor: v[1] === "." ? be : v[1] === "?" ? xe : v[1] === "@" ? ve : q }), n.removeAttribute(c);
+          a.push({ type: 1, index: r, name: v[2], strings: _, ctor: v[1] === "." ? ye : v[1] === "?" ? xe : v[1] === "@" ? ve : q }), n.removeAttribute(c);
         } else c.startsWith($) && (a.push({ type: 6, index: r }), n.removeAttribute(c));
         if (zt.test(n.tagName)) {
           const c = n.textContent.split($), u = c.length - 1;
           if (u > 0) {
             n.textContent = j ? j.emptyScript : "";
-            for (let _ = 0; _ < u; _++) n.append(c[_], P()), b.nextNode(), a.push({ type: 2, index: ++r });
+            for (let _ = 0; _ < u; _++) n.append(c[_], P()), y.nextNode(), a.push({ type: 2, index: ++r });
             n.append(c[u], P());
           }
         }
@@ -324,7 +324,7 @@ function S(s, t, e = s, i) {
   const r = R(t) ? void 0 : t._$litDirective$;
   return n?.constructor !== r && (n?._$AO?.(!1), r === void 0 ? n = void 0 : (n = new r(s), n._$AT(s, e, i)), i !== void 0 ? (e._$Co ??= [])[i] = n : e._$Cl = n), n !== void 0 && (t = S(s, n._$AS(s, t.values), n, i)), t;
 }
-class ye {
+class be {
   constructor(t, e) {
     this._$AV = [], this._$AN = void 0, this._$AD = t, this._$AM = e;
   }
@@ -336,23 +336,23 @@ class ye {
   }
   u(t) {
     const { el: { content: e }, parts: i } = this._$AD, n = (t?.creationScope ?? x).importNode(e, !0);
-    b.currentNode = n;
-    let r = b.nextNode(), o = 0, l = 0, a = i[0];
+    y.currentNode = n;
+    let r = y.nextNode(), o = 0, l = 0, a = i[0];
     for (; a !== void 0; ) {
       if (o === a.index) {
         let d;
-        a.type === 2 ? d = new L(r, r.nextSibling, this, t) : a.type === 1 ? d = new a.ctor(r, a.name, a.strings, this, t) : a.type === 6 && (d = new Ae(r, this, t)), this._$AV.push(d), a = i[++l];
+        a.type === 2 ? d = new B(r, r.nextSibling, this, t) : a.type === 1 ? d = new a.ctor(r, a.name, a.strings, this, t) : a.type === 6 && (d = new Ae(r, this, t)), this._$AV.push(d), a = i[++l];
       }
-      o !== a?.index && (r = b.nextNode(), o++);
+      o !== a?.index && (r = y.nextNode(), o++);
     }
-    return b.currentNode = x, n;
+    return y.currentNode = x, n;
   }
   p(t) {
     let e = 0;
     for (const i of this._$AV) i !== void 0 && (i.strings !== void 0 ? (i._$AI(t, i, e), e += i.strings.length - 2) : i._$AI(t[e])), e++;
   }
 }
-class L {
+class B {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
@@ -383,22 +383,22 @@ class L {
     this._$AH !== p && R(this._$AH) ? this._$AA.nextSibling.data = t : this.T(x.createTextNode(t)), this._$AH = t;
   }
   $(t) {
-    const { values: e, _$litType$: i } = t, n = typeof i == "number" ? this._$AC(t) : (i.el === void 0 && (i.el = B.createElement(Wt(i.h, i.h[0]), this.options)), i);
+    const { values: e, _$litType$: i } = t, n = typeof i == "number" ? this._$AC(t) : (i.el === void 0 && (i.el = H.createElement(Wt(i.h, i.h[0]), this.options)), i);
     if (this._$AH?._$AD === n) this._$AH.p(e);
     else {
-      const r = new ye(n, this), o = r.u(this.options);
+      const r = new be(n, this), o = r.u(this.options);
       r.p(e), this.T(o), this._$AH = r;
     }
   }
   _$AC(t) {
     let e = Pt.get(t.strings);
-    return e === void 0 && Pt.set(t.strings, e = new B(t)), e;
+    return e === void 0 && Pt.set(t.strings, e = new H(t)), e;
   }
   k(t) {
     at(this._$AH) || (this._$AH = [], this._$AR());
     const e = this._$AH;
     let i, n = 0;
-    for (const r of t) n === e.length ? e.push(i = new L(this.O(P()), this.O(P()), this, this.options)) : i = e[n], i._$AI(r), n++;
+    for (const r of t) n === e.length ? e.push(i = new B(this.O(P()), this.O(P()), this, this.options)) : i = e[n], i._$AI(r), n++;
     n < e.length && (this._$AR(i && i._$AB.nextSibling, n), e.length = n);
   }
   _$AR(t = this._$AA.nextSibling, e) {
@@ -436,7 +436,7 @@ class q {
     t === p ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
   }
 }
-class be extends q {
+class ye extends q {
   constructor() {
     super(...arguments), this.type = 3;
   }
@@ -477,13 +477,13 @@ class Ae {
   }
 }
 const we = ot.litHtmlPolyfillSupport;
-we?.(B, L), (ot.litHtmlVersions ??= []).push("3.3.3");
+we?.(H, B), (ot.litHtmlVersions ??= []).push("3.3.3");
 const Ce = (s, t, e) => {
   const i = e?.renderBefore ?? t;
   let n = i._$litPart$;
   if (n === void 0) {
     const r = e?.renderBefore ?? null;
-    i._$litPart$ = n = new L(t.insertBefore(P(), r), r, void 0, e ?? {});
+    i._$litPart$ = n = new B(t.insertBefore(P(), r), r, void 0, e ?? {});
   }
   return n._$AI(s), n;
 };
@@ -569,18 +569,18 @@ function ct(s) {
 function dt(s) {
   return ct({ ...s, state: !0, attribute: !1 });
 }
-var Rt, Bt;
+var Rt, Ht;
 (function(s) {
   s.language = "language", s.system = "system", s.comma_decimal = "comma_decimal", s.decimal_comma = "decimal_comma", s.space_comma = "space_comma", s.none = "none";
 })(Rt || (Rt = {})), function(s) {
   s.language = "language", s.system = "system", s.am_pm = "12", s.twenty_four = "24";
-}(Bt || (Bt = {}));
+}(Ht || (Ht = {}));
 var tt = function(s, t, e, i) {
   i = i || {}, e = e ?? {};
   var n = new Event(t, { bubbles: i.bubbles === void 0 || i.bubbles, cancelable: !!i.cancelable, composed: i.composed === void 0 || i.composed });
   return n.detail = e, s.dispatchEvent(n), n;
 };
-const ht = "battery-cell-card", Vt = "battery-cell-card-editor", Lt = 2.9, Me = 3.65, qt = 3, Gt = 3.55, ke = [244, 67, 54], Oe = [255, 152, 0], Pe = "#f44336", Re = "#ff9800", Be = "#26a69a", Le = ["Bulk", "Absorption", "Float"], He = {
+const ht = "ha-bms-card", Me = "HA BMS Card", Vt = "ha-bms-card-editor", Bt = 2.9, ke = 3.65, qt = 3, Gt = 3.55, Oe = [244, 67, 54], Pe = [255, 152, 0], Re = "#f44336", He = "#ff9800", Be = "#26a69a", Le = ["Bulk", "Absorption", "Float"], Ie = {
   Bulk: "#ff9800",
   Absorption: "#42a5f5",
   Float: "#4caf50"
@@ -589,18 +589,18 @@ const ht = "battery-cell-card", Vt = "battery-cell-card-editor", Lt = 2.9, Me = 
   8: { barW: 34, gap: 8, barH: 94, font: 11, badgeFont: 9, labelFont: 9.5 },
   4: { barW: 54, gap: 16, barH: 116, font: 13, badgeFont: 11, labelFont: 11 },
   2: { barW: 84, gap: 24, barH: 140, font: 15, badgeFont: 12, labelFont: 12.5 }
-}, Ht = Object.keys(Xt).map(Number).sort((s, t) => s - t);
-function Ie(s) {
-  let t = Ht[0], e = Math.abs(s - t);
-  for (const i of Ht) {
+}, Lt = Object.keys(Xt).map(Number).sort((s, t) => s - t);
+function Ue(s) {
+  let t = Lt[0], e = Math.abs(s - t);
+  for (const i of Lt) {
     const n = Math.abs(s - i);
     n < e && (t = i, e = n);
   }
   return Xt[t];
 }
-const Zt = "#FF7043", Kt = "#66BB6A", Jt = "#66BB6A", Ue = ["#FFB74D", "#FFA726", "#FF7043", "#EC407A"], Fe = ["#26C6DA", "#42A5F5", "#66BB6A", "#26A69A"], Ne = ["#42A5F5", "#26A69A", "#7E57C2", "#66BB6A"], De = ["off", "0", "no alarm", "ok", "normal", "false"];
+const Zt = "#FF7043", Kt = "#66BB6A", Jt = "#66BB6A", Fe = ["#FFB74D", "#FFA726", "#FF7043", "#EC407A"], Ne = ["#26C6DA", "#42A5F5", "#66BB6A", "#26A69A"], De = ["#42A5F5", "#26A69A", "#7E57C2", "#66BB6A"], ze = ["off", "0", "no alarm", "ok", "normal", "false"];
 function It(s) {
-  return (s - Lt) / (Me - Lt) * 100;
+  return (s - Bt) / (ke - Bt) * 100;
 }
 function Yt(s, t, e) {
   return s + (t - s) * e;
@@ -622,39 +622,39 @@ function Qt(s, t, e) {
   const i = Math.max(0, Math.min(100, s)) / 100;
   return [0, 1, 2].map((n) => Math.round(Yt(t[n], e[n], i)));
 }
-function ze(s, t) {
+function We(s, t) {
   return s.map((e) => Math.max(0, Math.min(255, Math.round(e * t))));
 }
-function We(s, t, e, i, n, r, o) {
+function je(s, t, e, i, n, r, o) {
   const l = et(s);
-  if (l === "low") return z(ke);
-  if (l === "high") return z(Oe);
+  if (l === "low") return z(Oe);
+  if (l === "high") return z(Pe);
   const a = i ? Qt(e, n, r) : o, d = Math.max(0, Math.min(1, (t - 33) / 44)), h = Yt(0.88, 1.1, d);
-  return z(ze(a, h));
-}
-function je(s) {
-  return `${s.toFixed(2)}V`;
+  return z(We(a, h));
 }
 function Ve(s) {
-  return `${s.toFixed(3)} V`;
+  return `${s.toFixed(2)}V`;
 }
 function qe(s) {
-  return s.toFixed(3);
+  return `${s.toFixed(3)} V`;
 }
 function Ge(s) {
+  return s.toFixed(3);
+}
+function Xe(s) {
   const t = Math.max(0, s), e = Math.floor(t / 86400), i = Math.floor(t % 86400 / 3600);
   return `${e}d ${i}h`;
 }
-function Xe(s) {
+function Ze(s) {
   const t = Math.round(s);
   return `${t >= 0 ? "+" : ""}${t} mV`;
 }
-var Ze = Object.defineProperty, Ke = Object.getOwnPropertyDescriptor, pt = (s, t, e, i) => {
-  for (var n = i > 1 ? void 0 : i ? Ke(t, e) : t, r = s.length - 1, o; r >= 0; r--)
+var Ke = Object.defineProperty, Je = Object.getOwnPropertyDescriptor, pt = (s, t, e, i) => {
+  for (var n = i > 1 ? void 0 : i ? Je(t, e) : t, r = s.length - 1, o; r >= 0; r--)
     (o = s[r]) && (n = (i ? o(t, e, n) : o(n)) || n);
-  return i && n && Ze(t, e, n), n;
+  return i && n && Ke(t, e, n), n;
 };
-const Je = [
+const Ye = [
   { name: "name", selector: { text: {} } },
   {
     type: "expandable",
@@ -728,7 +728,7 @@ const Je = [
       { name: "gradient_enabled", selector: { boolean: {} } }
     ]
   }
-], Ye = {
+], Qe = {
   name: "Card name",
   cell_entities: "Cell voltage entities (in physical order, C1 first)",
   min_cell_id_entity: "Minimum voltage cell ID entity (optional)",
@@ -747,17 +747,17 @@ const Je = [
   alarm_entities: "Alarm / fault / status entities",
   layout_mode: "Layout",
   gradient_enabled: "SOC color gradient"
-}, Qe = {
+}, ts = {
   alarm_entities: 'Any entity not in a healthy state shows as a warning banner. Entities whose id or name contains "allow" (e.g. Allow to charge) are treated as inverted - healthy is "on".',
   cell_entities: "Selection order sets the physical cell order shown on the card."
-}, ts = [
-  { key: "soc_warm_color", label: "SOC gradient — warm (low charge)", swatches: Ue, fallback: Zt },
-  { key: "soc_cool_color", label: "SOC gradient — cool (high charge)", swatches: Fe, fallback: Kt },
-  { key: "flat_cell_color", label: "Flat cell color (gradient off)", swatches: Ne, fallback: Jt }
+}, es = [
+  { key: "soc_warm_color", label: "SOC gradient — warm (low charge)", swatches: Fe, fallback: Zt },
+  { key: "soc_cool_color", label: "SOC gradient — cool (high charge)", swatches: Ne, fallback: Kt },
+  { key: "flat_cell_color", label: "Flat cell color (gradient off)", swatches: De, fallback: Jt }
 ];
 let E = class extends w {
   constructor() {
-    super(...arguments), this._computeLabel = (s) => s.title ? s.title : Ye[s.name] ?? s.name, this._computeHelper = (s) => Qe[s.name];
+    super(...arguments), this._computeLabel = (s) => s.title ? s.title : Qe[s.name] ?? s.name, this._computeHelper = (s) => ts[s.name];
   }
   setConfig(s) {
     this._config = s;
@@ -767,14 +767,14 @@ let E = class extends w {
       <ha-form
         .hass=${this.hass}
         .data=${this._config}
-        .schema=${Je}
+        .schema=${Ye}
         .computeLabel=${this._computeLabel}
         .computeHelper=${this._computeHelper}
         @value-changed=${this._valueChanged}
       ></ha-form>
 
       <div class="colors">
-        ${ts.map((s) => this._renderColorRow(s))}
+        ${es.map((s) => this._renderColorRow(s))}
       </div>
     `;
   }
@@ -869,23 +869,23 @@ pt([
 E = pt([
   jt(Vt)
 ], E);
-const es = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const ss = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  get BatteryCellCardEditor() {
+  get HaBmsCardEditor() {
     return E;
   }
 }, Symbol.toStringTag, { value: "Module" }));
-var ss = Object.defineProperty, is = Object.getOwnPropertyDescriptor, G = (s, t, e, i) => {
-  for (var n = i > 1 ? void 0 : i ? is(t, e) : t, r = s.length - 1, o; r >= 0; r--)
+var is = Object.defineProperty, ns = Object.getOwnPropertyDescriptor, G = (s, t, e, i) => {
+  for (var n = i > 1 ? void 0 : i ? ns(t, e) : t, r = s.length - 1, o; r >= 0; r--)
     (o = s[r]) && (n = (i ? o(t, e, n) : o(n)) || n);
-  return i && n && ss(t, e, n), n;
+  return i && n && is(t, e, n), n;
 };
 let T = class extends w {
   constructor() {
     super(...arguments), this._selectedCellIndex = null;
   }
   static async getConfigElement() {
-    return await Promise.resolve().then(() => es), document.createElement(Vt);
+    return await Promise.resolve().then(() => ss), document.createElement(Vt);
   }
   static getStubConfig() {
     return {
@@ -901,10 +901,10 @@ let T = class extends w {
       throw new Error("Invalid configuration");
     if (!Array.isArray(s.cell_entities) || s.cell_entities.length === 0)
       throw new Error(
-        "battery-cell-card: `cell_entities` must be a non-empty list of per-cell voltage entity ids"
+        "ha-bms-card: `cell_entities` must be a non-empty list of per-cell voltage entity ids"
       );
     if (!s.soc_entity)
-      throw new Error("battery-cell-card: `soc_entity` is required");
+      throw new Error("ha-bms-card: `soc_entity` is required");
     this._config = { layout_mode: "single-row", gradient_enabled: !0, ...s }, this._selectedCellIndex = null;
   }
   getCardSize() {
@@ -916,7 +916,7 @@ let T = class extends w {
   }
   render() {
     if (!this._config || !this.hass) return p;
-    const s = this._config, t = !!this.hass.themes?.darkMode, e = this._themeTokens(t), i = this._cellVoltages(), n = i.length, r = this._num(s.soc_entity) ?? 0, o = s.gradient_enabled ?? !0, l = Y(s.soc_warm_color || Zt), a = Y(s.soc_cool_color || Kt), d = Y(s.flat_cell_color || Jt), c = (s.layout_mode ?? "single-row") === "two-row" ? Math.ceil(n / 2) : n, u = Ie(c), _ = c * u.barW + (c - 1) * u.gap, { minIdx: v, maxIdx: te } = this._minMaxIdx(i), ee = this._average(i), ut = i.map((g, f) => {
+    const s = this._config, t = !!this.hass.themes?.darkMode, e = this._themeTokens(t), i = this._cellVoltages(), n = i.length, r = this._num(s.soc_entity) ?? 0, o = s.gradient_enabled ?? !0, l = Y(s.soc_warm_color || Zt), a = Y(s.soc_cool_color || Kt), d = Y(s.flat_cell_color || Jt), c = (s.layout_mode ?? "single-row") === "two-row" ? Math.ceil(n / 2) : n, u = Ue(c), _ = c * u.barW + (c - 1) * u.gap, { minIdx: v, maxIdx: te } = this._minMaxIdx(i), ee = this._average(i), ut = i.map((g, f) => {
       const Z = f === v, K = f === te;
       return g === null ? {
         index: f,
@@ -933,24 +933,24 @@ let T = class extends w {
         index: f,
         label: `C${f + 1}`,
         voltage: g,
-        voltageLabel: je(g),
+        voltageLabel: Ve(g),
         heightPct: Math.max(0, Math.min(100, It(g))),
-        color: We(g, It(g), r, o, l, a, d),
+        color: je(g, It(g), r, o, l, a, d),
         badge: Z ? "▼" : K ? "▲" : "",
-        badgeColor: Z ? Pe : K ? Re : "transparent",
+        badgeColor: Z ? Re : K ? He : "transparent",
         isMin: Z,
         isMax: K
       };
-    }), H = o ? Qt(r, l, a) : d, X = z(H), I = this._alarmMessages(), se = I.length > 0, U = i.filter((g) => g !== null), gt = this._num(s.pack_voltage_entity) ?? U.reduce((g, f) => g + f, 0), F = this._num(s.current_entity), _t = this._num(s.power_entity) ?? (F !== null ? F * gt : null), ie = this._num(s.deviation_entity) ?? (U.length ? Math.max(...U) - Math.min(...U) : 0), mt = this._num(s.capacity_remaining_entity), ft = this._num(s.capacity_installed_entity), $t = this._num(s.cycles_entity), yt = this._num(s.since_full_charge_entity), bt = this._state(s.temperature_entity), ne = s.temperature_entity ? this.hass.states[s.temperature_entity]?.attributes?.unit_of_measurement ?? "" : "", M = this._state(s.charge_mode_entity), xt = M && Le.includes(M) ? He[M] : "#9e9e9e", N = this._expandedDetail(ut, ee);
+    }), L = o ? Qt(r, l, a) : d, X = z(L), I = this._alarmMessages(), se = I.length > 0, U = i.filter((g) => g !== null), gt = this._num(s.pack_voltage_entity) ?? U.reduce((g, f) => g + f, 0), F = this._num(s.current_entity), _t = this._num(s.power_entity) ?? (F !== null ? F * gt : null), ie = this._num(s.deviation_entity) ?? (U.length ? Math.max(...U) - Math.min(...U) : 0), mt = this._num(s.capacity_remaining_entity), ft = this._num(s.capacity_installed_entity), $t = this._num(s.cycles_entity), bt = this._num(s.since_full_charge_entity), yt = this._state(s.temperature_entity), ne = s.temperature_entity ? this.hass.states[s.temperature_entity]?.attributes?.unit_of_measurement ?? "" : "", M = this._state(s.charge_mode_entity), xt = M && Le.includes(M) ? Ie[M] : "#9e9e9e", N = this._expandedDetail(ut, ee);
     return m`
       <ha-card
         style="background:${e.cardBg};color:${e.primaryText};box-shadow:${e.cardShadow};"
       >
         <div
           class="header"
-          style="background:linear-gradient(180deg, ${Q(H, e.socHeaderTintAlpha)}, rgba(0,0,0,0));"
+          style="background:linear-gradient(180deg, ${Q(L, e.socHeaderTintAlpha)}, rgba(0,0,0,0));"
         >
-          <div class="icon-badge" style="background:${Q(H, e.socIconBgAlpha)};">
+          <div class="icon-badge" style="background:${Q(L, e.socIconBgAlpha)};">
             <div class="battery-glyph" style="border-color:${X};">
               <span style="background:${X};"></span>
             </div>
@@ -959,7 +959,7 @@ let T = class extends w {
             <div class="title">${s.name || "Battery Bank"}</div>
             <div class="subtitle" style="color:${e.subtitleText};">LiFePO4 · ${n}S</div>
           </div>
-          <div class="soc-chip" style="background:${Q(H, e.socChipBgAlpha)};color:${X};">
+          <div class="soc-chip" style="background:${Q(L, e.socChipBgAlpha)};color:${X};">
             ${Math.round(r)}%
           </div>
           <div class="kebab" style="color:${e.kebabText};" @click=${this._handleMoreInfo}>⋮</div>
@@ -1029,15 +1029,15 @@ let T = class extends w {
 
         <div class="stats-grid">
           ${this._statRow("Pack voltage", `${gt.toFixed(2)} V`, e)}
-          ${this._statRow("Deviation", `${qe(ie)} V`, e)}
+          ${this._statRow("Deviation", `${Ge(ie)} V`, e)}
           ${this._statRow("Current", F !== null ? `${F.toFixed(1)} A` : "--", e)}
           ${this._statRow("Remaining", mt !== null ? `${mt.toFixed(1)} Ah` : "--", e)}
-          ${this._statRow("Temp", bt !== null ? `${bt}${ne}` : "--", e)}
+          ${this._statRow("Temp", yt !== null ? `${yt}${ne}` : "--", e)}
           ${this._statRow("Installed", ft !== null ? `${ft.toFixed(1)} Ah` : "--", e)}
           ${this._statRow("Cycles", $t !== null ? `${Math.round($t)}` : "--", e, !0)}
           ${this._statRow(
       "Since full charge",
-      yt !== null ? Ge(yt) : "--",
+      bt !== null ? Xe(bt) : "--",
       e,
       !0
     )}
@@ -1148,7 +1148,7 @@ let T = class extends w {
     const t = this._state(s.entity);
     if (t === null) return !1;
     const e = t.toLowerCase();
-    return s.invert ? e !== "on" : !(s.ok_states ?? De).map((n) => n.toLowerCase()).includes(e);
+    return s.invert ? e !== "on" : !(s.ok_states ?? ze).map((n) => n.toLowerCase()).includes(e);
   }
   _alarmMessages() {
     if (!this._config || !this.hass) return [];
@@ -1169,8 +1169,8 @@ let T = class extends w {
     if (!e || Number.isNaN(e.voltage)) return null;
     const i = (e.voltage - t) * 1e3, n = e.isMin ? "Lowest cell in pack" : e.isMax ? "Highest cell in pack — actively balancing" : "Within normal range";
     return {
-      title: `Cell ${e.index + 1} · ${Ve(e.voltage)}`,
-      line1: `${Xe(i)} from pack average`,
+      title: `Cell ${e.index + 1} · ${qe(e.voltage)}`,
+      line1: `${Ze(i)} from pack average`,
       line2: n
     };
   }
@@ -1358,11 +1358,11 @@ const st = window;
 st.customCards = st.customCards || [];
 st.customCards.push({
   type: ht,
-  name: "Battery Cell Card",
+  name: Me,
   description: "Per-cell voltage, balancing, SOC, power, and health monitoring for a LiFePO4 battery pack.",
   preview: !0,
   documentationURL: "https://github.com/bb12489/ha-bms-card"
 });
 export {
-  T as BatteryCellCard
+  T as HaBmsCard
 };

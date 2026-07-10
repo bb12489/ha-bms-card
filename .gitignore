@@ -2,7 +2,7 @@ node_modules/
 *.log
 .DS_Store
 
-# dist/battery-cell-card.js IS committed - HACS's plugin-category validator
+# dist/ha-bms-card.js IS committed - HACS's plugin-category validator
 # requires the built bundle to exist in the repo tree (at root or dist/)
 # unless a GitHub Release with a matching asset exists. Keep it in sync with
 # src/ via `npm run build` before committing; CI checks this with `git diff`.

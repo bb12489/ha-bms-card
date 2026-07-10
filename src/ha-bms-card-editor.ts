@@ -10,7 +10,7 @@ import {
   SOC_COOL_SWATCHES,
   SOC_WARM_SWATCHES,
 } from "./const";
-import type { BatteryCellCardConfig } from "./types";
+import type { HaBmsCardConfig } from "./types";
 
 const SCHEMA = [
   { name: "name", selector: { text: {} } },
@@ -129,12 +129,12 @@ const COLOR_FIELDS: ColorField[] = [
 ];
 
 @customElement(EDITOR_TAG)
-export class BatteryCellCardEditor extends LitElement implements LovelaceCardEditor {
+export class HaBmsCardEditor extends LitElement implements LovelaceCardEditor {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @state() private _config?: BatteryCellCardConfig;
+  @state() private _config?: HaBmsCardConfig;
 
-  public setConfig(config: BatteryCellCardConfig): void {
+  public setConfig(config: HaBmsCardConfig): void {
     this._config = config;
   }
 
@@ -255,6 +255,6 @@ export class BatteryCellCardEditor extends LitElement implements LovelaceCardEdi
 
 declare global {
   interface HTMLElementTagNameMap {
-    [EDITOR_TAG]: BatteryCellCardEditor;
+    [EDITOR_TAG]: HaBmsCardEditor;
   }
 }

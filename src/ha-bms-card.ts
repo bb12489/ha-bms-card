@@ -2,6 +2,7 @@ import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { fireEvent, type HomeAssistant, type LovelaceCardEditor } from "custom-card-helpers";
 import {
+  CARD_NAME,
   CARD_TYPE,
   CHARGE_MODE_COLOR,
   CHARGE_MODES,
@@ -28,27 +29,27 @@ import {
 import type {
   AlarmEntityConfig,
   AlarmEntityEntry,
-  BatteryCellCardConfig,
+  HaBmsCardConfig,
   CellRenderData,
   ExpandedCellDetail,
   ThemeTokens,
 } from "./types";
-import "./battery-cell-card-editor";
+import "./ha-bms-card-editor";
 
 @customElement(CARD_TYPE)
-export class BatteryCellCard extends LitElement {
+export class HaBmsCard extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
 
-  @state() private _config!: BatteryCellCardConfig;
+  @state() private _config!: HaBmsCardConfig;
 
   @state() private _selectedCellIndex: number | null = null;
 
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
-    await import("./battery-cell-card-editor");
+    await import("./ha-bms-card-editor");
     return document.createElement(EDITOR_TAG) as LovelaceCardEditor;
   }
 
-  public static getStubConfig(): Partial<BatteryCellCardConfig> {
+  public static getStubConfig(): Partial<HaBmsCardConfig> {
     return {
       type: `custom:${CARD_TYPE}`,
       cell_entities: [],
@@ -58,17 +59,17 @@ export class BatteryCellCard extends LitElement {
     };
   }
 
-  public setConfig(config: BatteryCellCardConfig): void {
+  public setConfig(config: HaBmsCardConfig): void {
     if (!config) {
       throw new Error("Invalid configuration");
     }
     if (!Array.isArray(config.cell_entities) || config.cell_entities.length === 0) {
       throw new Error(
-        "battery-cell-card: `cell_entities` must be a non-empty list of per-cell voltage entity ids"
+        "ha-bms-card: `cell_entities` must be a non-empty list of per-cell voltage entity ids"
       );
     }
     if (!config.soc_entity) {
-      throw new Error("battery-cell-card: `soc_entity` is required");
+      throw new Error("ha-bms-card: `soc_entity` is required");
     }
     this._config = { layout_mode: "single-row", gradient_enabled: true, ...config };
     this._selectedCellIndex = null;
@@ -646,7 +647,7 @@ export class BatteryCellCard extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [CARD_TYPE]: BatteryCellCard;
+    [CARD_TYPE]: HaBmsCard;
   }
 }
 
@@ -656,7 +657,7 @@ const registrationWindow = window as unknown as {
 registrationWindow.customCards = registrationWindow.customCards || [];
 registrationWindow.customCards.push({
   type: CARD_TYPE,
-  name: "Battery Cell Card",
+  name: CARD_NAME,
   description: "Per-cell voltage, balancing, SOC, power, and health monitoring for a LiFePO4 battery pack.",
   preview: true,
   documentationURL: "https://github.com/bb12489/ha-bms-card",

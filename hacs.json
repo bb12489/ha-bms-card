@@ -1,6 +1,6 @@
 {
-  "name": "Battery Cell Card",
+  "name": "HA BMS Card",
   "content_in_root": false,
-  "filename": "battery-cell-card.js",
+  "filename": "ha-bms-card.js",
   "render_readme": true
 }

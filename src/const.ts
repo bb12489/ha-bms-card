@@ -1,6 +1,6 @@
-export const CARD_TYPE = "battery-cell-card";
-export const CARD_NAME = "Battery Cell Card";
-export const EDITOR_TAG = "battery-cell-card-editor";
+export const CARD_TYPE = "ha-bms-card";
+export const CARD_NAME = "HA BMS Card";
+export const EDITOR_TAG = "ha-bms-card-editor";
 
 // LiFePO4 cell range spans ~2.90V (near-empty knee) to ~3.65V (near-full knee).
 export const SCALE_MIN = 2.9;

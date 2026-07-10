@@ -4,9 +4,9 @@ import { resolve } from "path";
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, "src/battery-cell-card.ts"),
+      entry: resolve(__dirname, "src/ha-bms-card.ts"),
       formats: ["es"],
-      fileName: () => "battery-cell-card.js",
+      fileName: () => "ha-bms-card.js",
     },
     outDir: "dist",
     emptyOutDir: true,

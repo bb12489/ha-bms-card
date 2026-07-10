@@ -23,4 +23,4 @@ jobs:
       - name: Attach build to release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/battery-cell-card.js
+          files: dist/ha-bms-card.js
