@@ -60,22 +60,23 @@ export class HaBmsCard extends LitElement {
   }
 
   public setConfig(config: HaBmsCardConfig): void {
-    if (!config) {
+    if (!config || typeof config !== "object") {
       throw new Error("Invalid configuration");
     }
-    if (!Array.isArray(config.cell_entities) || config.cell_entities.length === 0) {
-      throw new Error(
-        "ha-bms-card: `cell_entities` must be a non-empty list of per-cell voltage entity ids"
-      );
+    if (config.cell_entities !== undefined && !Array.isArray(config.cell_entities)) {
+      throw new Error("ha-bms-card: `cell_entities` must be a list of entity ids");
     }
-    if (!config.soc_entity) {
-      throw new Error("ha-bms-card: `soc_entity` is required");
-    }
+    // An empty/missing cell_entities or soc_entity is a "not configured yet"
+    // state (e.g. a freshly added card, or the stub config used for the card
+    // picker preview) rather than an invalid one - render() shows a setup
+    // prompt for that instead of throwing, so adding the card from the
+    // picker doesn't immediately crash before the editor is even open.
     this._config = { layout_mode: "single-row", gradient_enabled: true, ...config };
     this._selectedCellIndex = null;
   }
 
   public getCardSize(): number {
+    if (!this._config?.cell_entities?.length || !this._config?.soc_entity) return 2;
     let size = 5;
     if (this._alarmMessages().length) size += 1;
     if (this._selectedCellIndex !== null) size += 1;
@@ -249,10 +250,37 @@ export class HaBmsCard extends LitElement {
       padding: 6px 0;
       font-size: 11.5px;
     }
+    .setup-hint {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--secondary-text-color, rgba(0, 0, 0, 0.6));
+    }
+    .setup-hint-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--primary-text-color, inherit);
+    }
   `;
 
   protected render() {
     if (!this._config || !this.hass) return nothing;
+
+    if (!this._config.cell_entities?.length || !this._config.soc_entity) {
+      return html`
+        <ha-card>
+          <div class="setup-hint">
+            <div class="setup-hint-title">HA BMS Card isn't configured yet</div>
+            <div>
+              Edit this card and pick at least one cell voltage entity and a
+              state-of-charge entity to get started.
+            </div>
+          </div>
+        </ha-card>
+      `;
+    }
 
     const cfg = this._config;
     // hass.themes.darkMode is a real, long-standing HA runtime property that
