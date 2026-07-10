@@ -18,7 +18,7 @@ import {
   WARN_LOW,
 } from "./const";
 import { cellColor, hexToRgb, pctFor, rgbaCss, rgbToCss, socMidRgb, statusOf } from "./color-utils";
-import { computeCellLayout } from "./layout-utils";
+import { computeCellLayout, MIN_CELLS_ROW_WIDTH } from "./layout-utils";
 import {
   formatCellVoltageShort,
   formatDeltaMv,
@@ -128,6 +128,7 @@ export class HaBmsCard extends LitElement {
   static styles = css`
     :host {
       display: block;
+      min-width: ${MIN_CELLS_ROW_WIDTH + CELLS_WRAP_HORIZONTAL_PADDING}px;
     }
     ha-card {
       border-radius: 12px;
@@ -219,7 +220,6 @@ export class HaBmsCard extends LitElement {
       display: flex;
       justify-content: center;
       padding: 4px 16px 6px;
-      overflow-x: auto;
     }
     .cells-row {
       display: flex;

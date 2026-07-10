@@ -4,6 +4,12 @@ import type { LayoutMode } from "./types";
 const MIN_BAR_WIDTH = 14;
 const MAX_BAR_WIDTH = 100;
 
+// Width of the cell-bars row needed to show 8 cells in a single row at their
+// reference size - the card is given a CSS min-width based on this so it
+// never has to shrink bars below a readable size (and never needs to scroll).
+const EIGHT_CELL_SIZING = sizingFor(8);
+export const MIN_CELLS_ROW_WIDTH = 8 * EIGHT_CELL_SIZING.barW + 7 * EIGHT_CELL_SIZING.gap;
+
 export interface CellLayout extends CellSizing {
   perRow: number;
   rowWidth: number;
