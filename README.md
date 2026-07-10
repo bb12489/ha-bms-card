@@ -4,10 +4,10 @@ A Home Assistant Lovelace card for monitoring a LiFePO4 battery pack: per-cell
 voltages, min/max balancing badges, state of charge, power, charge mode,
 capacity, temperature, cycle count, and configurable alarm banners.
 
-Built and validated against a real **SerialBattery (EG4 LifePower)** 8S pack,
-but every value is a plain entity mapping in the card config — it works with
-**any integration that exposes per-cell voltage sensors** (SerialBattery, JK
-BMS, Victron, ESPHome, etc.), not just one specific BMS.
+Every value is a plain entity mapping in the card config, so it works with
+**any BMS integration that exposes per-cell voltage sensors** (SerialBattery,
+JK BMS, Victron, ESPHome, and others) — nothing is tied to one specific
+battery or BMS.
 
 ![Battery Cell Card - dark theme](screenshots/01-card.png)
 
