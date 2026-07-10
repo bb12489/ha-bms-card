@@ -82,8 +82,9 @@ const SCHEMA = [
           select: {
             mode: "dropdown",
             options: [
-              { value: "single-row", label: "Single row" },
-              { value: "two-row", label: "Two rows" },
+              { value: "auto", label: "Auto (fit to card width)" },
+              { value: "single-row", label: "Force single row" },
+              { value: "two-row", label: "Force two rows" },
             ],
           },
         },
@@ -118,6 +119,8 @@ const HELPERS: Record<string, string> = {
   alarm_entities:
     'Any entity not in a healthy state shows as a warning banner. Entities whose id or name contains "allow" (e.g. Allow to charge) are treated as inverted - healthy is "on".',
   cell_entities: "Selection order sets the physical cell order shown on the card.",
+  layout_mode:
+    'Auto reflows the cell bars to fit the card\'s actual rendered width as you resize it. "Force single/two row" always uses that many rows regardless of width.',
 };
 
 interface ColorField {

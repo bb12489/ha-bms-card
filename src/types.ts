@@ -18,7 +18,7 @@ export interface AlarmEntityConfig {
 }
 export type AlarmEntityEntry = string | AlarmEntityConfig;
 
-export type LayoutMode = "single-row" | "two-row";
+export type LayoutMode = "auto" | "single-row" | "two-row";
 
 export interface HaBmsCardConfig extends LovelaceCardConfig {
   type: string;

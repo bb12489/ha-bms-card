@@ -23,7 +23,10 @@ battery or BMS.
 - Automatically follows Home Assistant's active light/dark theme
 - Configurable alarm banner driven by whatever alarm/fault entities your BMS
   integration exposes
-- Single-row or two-row layouts for 4S–16S+ packs
+- Cell bars reflow live as you resize the card in the dashboard (masonry or
+  sections view) — fewer/more rows and wider/narrower bars adapt to the
+  actual rendered width, or force a fixed single-/two-row layout if you
+  prefer
 - Fully configured through the GUI editor — no YAML required
 
 ### Dynamic card gradient based on SoC
@@ -88,7 +91,7 @@ alarm_entities:
   - sensor.battery_high_charge_current
   - binary_sensor.battery_allow_to_charge
   - binary_sensor.battery_allow_to_discharge
-layout_mode: single-row
+layout_mode: auto
 gradient_enabled: true
 soc_warm_color: "#FF7043"
 soc_cool_color: "#66BB6A"
@@ -117,6 +120,15 @@ not mapped directly).
 | `cycles_entity` | integer | optional |
 | `since_full_charge_entity` | **raw seconds** | optional; formatted as `{days}d {hours}h` |
 | `alarm_entities` | any entity id | shown in the warning banner when not in a healthy state; entities whose id/name contains "allow" are treated as inverted (healthy = `on`) |
+
+### Layout & appearance options
+
+| Config key | Values | Notes |
+|---|---|---|
+| `layout_mode` | `auto` (default) \| `single-row` \| `two-row` | `auto` reflows the cell row count and bar width to fit the card's actual rendered width as you resize it; the other two force a fixed row count regardless of width |
+| `gradient_enabled` | boolean, default `true` | when `false`, in-range cells use `flat_cell_color` instead of the SOC-blended gradient |
+| `soc_warm_color` / `soc_cool_color` | hex color | endpoints of the SOC gradient (low charge / high charge) |
+| `flat_cell_color` | hex color | used for in-range cells when `gradient_enabled` is `false` |
 
 ## Development
 

@@ -16,9 +16,9 @@ import {
   STATUS_LOW_HEX,
   WARN_HIGH,
   WARN_LOW,
-  sizingFor,
 } from "./const";
 import { cellColor, hexToRgb, pctFor, rgbaCss, rgbToCss, socMidRgb, statusOf } from "./color-utils";
+import { computeCellLayout } from "./layout-utils";
 import {
   formatCellVoltageShort,
   formatDeltaMv,
@@ -36,6 +36,10 @@ import type {
 } from "./types";
 import "./ha-bms-card-editor";
 
+// Horizontal padding (left + right) of .cells-wrap, subtracted from the
+// measured card width to get the space actually available to cell bars.
+const CELLS_WRAP_HORIZONTAL_PADDING = 32;
+
 @customElement(CARD_TYPE)
 export class HaBmsCard extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -43,6 +47,10 @@ export class HaBmsCard extends LitElement {
   @state() private _config!: HaBmsCardConfig;
 
   @state() private _selectedCellIndex: number | null = null;
+
+  @state() private _measuredWidth = 0;
+
+  private _resizeObserver?: ResizeObserver;
 
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
     await import("./ha-bms-card-editor");
@@ -54,7 +62,7 @@ export class HaBmsCard extends LitElement {
       type: `custom:${CARD_TYPE}`,
       cell_entities: [],
       soc_entity: "",
-      layout_mode: "single-row",
+      layout_mode: "auto",
       gradient_enabled: true,
     };
   }
@@ -71,13 +79,34 @@ export class HaBmsCard extends LitElement {
     // picker preview) rather than an invalid one - render() shows a setup
     // prompt for that instead of throwing, so adding the card from the
     // picker doesn't immediately crash before the editor is even open.
-    this._config = { layout_mode: "single-row", gradient_enabled: true, ...config };
+    this._config = { layout_mode: "auto", gradient_enabled: true, ...config };
     this._selectedCellIndex = null;
+  }
+
+  public connectedCallback(): void {
+    super.connectedCallback();
+    if (!this._resizeObserver) {
+      this._resizeObserver = new ResizeObserver((entries) => {
+        const width = entries[0]?.contentRect.width ?? 0;
+        if (Math.abs(width - this._measuredWidth) > 0.5) {
+          this._measuredWidth = width;
+        }
+      });
+    }
+    this._resizeObserver.observe(this);
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._resizeObserver?.disconnect();
   }
 
   public getCardSize(): number {
     if (!this._config?.cell_entities?.length || !this._config?.soc_entity) return 2;
-    let size = 5;
+    const cellCount = this._config.cell_entities.length;
+    const layout = computeCellLayout(cellCount, this._measuredWidth - CELLS_WRAP_HORIZONTAL_PADDING, this._config.layout_mode ?? "auto");
+    const cellRows = Math.ceil(cellCount / layout.perRow);
+    let size = 4 + cellRows;
     if (this._alarmMessages().length) size += 1;
     if (this._selectedCellIndex !== null) size += 1;
     return size;
@@ -89,7 +118,11 @@ export class HaBmsCard extends LitElement {
     min_columns: number;
     min_rows: number;
   } {
-    return { columns: 12, rows: 5, min_columns: 6, min_rows: 4 };
+    const cellCount = this._config?.cell_entities?.length ?? 8;
+    let rows = 5 + (cellCount > 8 ? 1 : 0);
+    if (this._alarmMessages().length) rows += 1;
+    if (this._selectedCellIndex !== null) rows += 1;
+    return { columns: 12, rows, min_columns: 4, min_rows: 3 };
   }
 
   static styles = css`
@@ -186,11 +219,13 @@ export class HaBmsCard extends LitElement {
       display: flex;
       justify-content: center;
       padding: 4px 16px 6px;
+      overflow-x: auto;
     }
     .cells-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      flex-shrink: 0;
     }
     .cell {
       display: flex;
@@ -295,10 +330,9 @@ export class HaBmsCard extends LitElement {
     const warmRgb = hexToRgb(cfg.soc_warm_color || DEFAULT_SOC_WARM_COLOR);
     const coolRgb = hexToRgb(cfg.soc_cool_color || DEFAULT_SOC_COOL_COLOR);
     const flatRgb = hexToRgb(cfg.flat_cell_color || DEFAULT_FLAT_CELL_COLOR);
-    const layoutMode = cfg.layout_mode ?? "single-row";
-    const cellsPerRow = layoutMode === "two-row" ? Math.ceil(cellCount / 2) : cellCount;
-    const sizing = sizingFor(cellsPerRow);
-    const cellsRowWidth = cellsPerRow * sizing.barW + (cellsPerRow - 1) * sizing.gap;
+    const layoutMode = cfg.layout_mode ?? "auto";
+    const sizing = computeCellLayout(cellCount, this._measuredWidth - CELLS_WRAP_HORIZONTAL_PADDING, layoutMode);
+    const cellsRowWidth = sizing.rowWidth;
 
     const { minIdx, maxIdx } = this._minMaxIdx(voltages);
     const avg = this._average(voltages);
