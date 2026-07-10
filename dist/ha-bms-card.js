@@ -95,8 +95,8 @@ let A = class extends HTMLElement {
       this[e] = o;
     } };
     return { get: n, set(o) {
-      const a = n?.call(this);
-      r?.call(this, o), this.requestUpdate(t, a, i);
+      const l = n?.call(this);
+      r?.call(this, o), this.requestUpdate(t, l, i);
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(t) {
@@ -181,8 +181,8 @@ let A = class extends HTMLElement {
     if (n !== void 0 && this._$Em !== n) {
       const r = i.getPropertyOptions(n), o = typeof r.converter == "function" ? { fromAttribute: r.converter } : r.converter?.fromAttribute !== void 0 ? r.converter : j;
       this._$Em = n;
-      const a = o.fromAttribute(e, r.type);
-      this[n] = a ?? this._$Ej?.get(n) ?? a, this._$Em = null;
+      const l = o.fromAttribute(e, r.type);
+      this[n] = l ?? this._$Ej?.get(n) ?? l, this._$Em = null;
     }
   }
   requestUpdate(t, e, i, n = !1, r) {
@@ -218,8 +218,8 @@ let A = class extends HTMLElement {
       }
       const i = this.constructor.elementProperties;
       if (i.size > 0) for (const [n, r] of i) {
-        const { wrapped: o } = r, a = this[n];
-        o !== !0 || this._$AL.has(n) || a === void 0 || this.C(n, void 0, r, a);
+        const { wrapped: o } = r, l = this[n];
+        o !== !0 || this._$AL.has(n) || l === void 0 || this.C(n, void 0, r, l);
       }
     }
     let t = !1;
@@ -272,12 +272,12 @@ function Kt(s, t) {
 const Ce = (s, t) => {
   const e = s.length - 1, i = [];
   let n, r = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", o = k;
-  for (let a = 0; a < e; a++) {
-    const l = s[a];
+  for (let l = 0; l < e; l++) {
+    const a = s[l];
     let h, d, c = -1, _ = 0;
-    for (; _ < l.length && (o.lastIndex = _, d = o.exec(l), d !== null); ) _ = o.lastIndex, o === k ? d[1] === "!--" ? o = Pt : d[1] !== void 0 ? o = Rt : d[2] !== void 0 ? (Xt.test(d[2]) && (n = RegExp("</" + d[2], "g")), o = b) : d[3] !== void 0 && (o = b) : o === b ? d[0] === ">" ? (o = n ?? k, c = -1) : d[1] === void 0 ? c = -2 : (c = o.lastIndex - d[2].length, h = d[1], o = d[3] === void 0 ? b : d[3] === '"' ? Lt : Ht) : o === Lt || o === Ht ? o = b : o === Pt || o === Rt ? o = k : (o = b, n = void 0);
-    const g = o === b && s[a + 1].startsWith("/>") ? " " : "";
-    r += o === k ? l + ve : c >= 0 ? (i.push(h), l.slice(0, c) + qt + l.slice(c) + $ + g) : l + $ + (c === -2 ? a : g);
+    for (; _ < a.length && (o.lastIndex = _, d = o.exec(a), d !== null); ) _ = o.lastIndex, o === k ? d[1] === "!--" ? o = Pt : d[1] !== void 0 ? o = Rt : d[2] !== void 0 ? (Xt.test(d[2]) && (n = RegExp("</" + d[2], "g")), o = b) : d[3] !== void 0 && (o = b) : o === b ? d[0] === ">" ? (o = n ?? k, c = -1) : d[1] === void 0 ? c = -2 : (c = o.lastIndex - d[2].length, h = d[1], o = d[3] === void 0 ? b : d[3] === '"' ? Lt : Ht) : o === Lt || o === Ht ? o = b : o === Pt || o === Rt ? o = k : (o = b, n = void 0);
+    const g = o === b && s[l + 1].startsWith("/>") ? " " : "";
+    r += o === k ? a + ve : c >= 0 ? (i.push(h), a.slice(0, c) + qt + a.slice(c) + $ + g) : a + $ + (c === -2 ? l : g);
   }
   return [Kt(s, r + (s[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), i];
 };
@@ -286,29 +286,29 @@ class L {
     let n;
     this.parts = [];
     let r = 0, o = 0;
-    const a = t.length - 1, l = this.parts, [h, d] = Ce(t, e);
+    const l = t.length - 1, a = this.parts, [h, d] = Ce(t, e);
     if (this.el = L.createElement(h, i), y.currentNode = this.el.content, e === 2 || e === 3) {
       const c = this.el.content.firstChild;
       c.replaceWith(...c.childNodes);
     }
-    for (; (n = y.nextNode()) !== null && l.length < a; ) {
+    for (; (n = y.nextNode()) !== null && a.length < l; ) {
       if (n.nodeType === 1) {
         if (n.hasAttributes()) for (const c of n.getAttributeNames()) if (c.endsWith(qt)) {
           const _ = d[o++], g = n.getAttribute(c).split($), v = /([.?@])?(.*)/.exec(_);
-          l.push({ type: 1, index: r, name: v[2], strings: g, ctor: v[1] === "." ? Ee : v[1] === "?" ? Me : v[1] === "@" ? Te : Z }), n.removeAttribute(c);
-        } else c.startsWith($) && (l.push({ type: 6, index: r }), n.removeAttribute(c));
+          a.push({ type: 1, index: r, name: v[2], strings: g, ctor: v[1] === "." ? Ee : v[1] === "?" ? Me : v[1] === "@" ? Te : Z }), n.removeAttribute(c);
+        } else c.startsWith($) && (a.push({ type: 6, index: r }), n.removeAttribute(c));
         if (Xt.test(n.tagName)) {
           const c = n.textContent.split($), _ = c.length - 1;
           if (_ > 0) {
             n.textContent = V ? V.emptyScript : "";
-            for (let g = 0; g < _; g++) n.append(c[g], R()), y.nextNode(), l.push({ type: 2, index: ++r });
+            for (let g = 0; g < _; g++) n.append(c[g], R()), y.nextNode(), a.push({ type: 2, index: ++r });
             n.append(c[_], R());
           }
         }
-      } else if (n.nodeType === 8) if (n.data === Zt) l.push({ type: 2, index: r });
+      } else if (n.nodeType === 8) if (n.data === Zt) a.push({ type: 2, index: r });
       else {
         let c = -1;
-        for (; (c = n.data.indexOf($, c + 1)) !== -1; ) l.push({ type: 7, index: r }), c += $.length - 1;
+        for (; (c = n.data.indexOf($, c + 1)) !== -1; ) a.push({ type: 7, index: r }), c += $.length - 1;
       }
       r++;
     }
@@ -337,13 +337,13 @@ class Se {
   u(t) {
     const { el: { content: e }, parts: i } = this._$AD, n = (t?.creationScope ?? x).importNode(e, !0);
     y.currentNode = n;
-    let r = y.nextNode(), o = 0, a = 0, l = i[0];
-    for (; l !== void 0; ) {
-      if (o === l.index) {
+    let r = y.nextNode(), o = 0, l = 0, a = i[0];
+    for (; a !== void 0; ) {
+      if (o === a.index) {
         let h;
-        l.type === 2 ? h = new I(r, r.nextSibling, this, t) : l.type === 1 ? h = new l.ctor(r, l.name, l.strings, this, t) : l.type === 6 && (h = new ke(r, this, t)), this._$AV.push(h), l = i[++a];
+        a.type === 2 ? h = new I(r, r.nextSibling, this, t) : a.type === 1 ? h = new a.ctor(r, a.name, a.strings, this, t) : a.type === 6 && (h = new ke(r, this, t)), this._$AV.push(h), a = i[++l];
       }
-      o !== l?.index && (r = y.nextNode(), o++);
+      o !== a?.index && (r = y.nextNode(), o++);
     }
     return y.currentNode = x, n;
   }
@@ -426,9 +426,9 @@ class Z {
     let o = !1;
     if (r === void 0) t = S(this, t, e, 0), o = !H(t) || t !== this._$AH && t !== C, o && (this._$AH = t);
     else {
-      const a = t;
-      let l, h;
-      for (t = r[0], l = 0; l < r.length - 1; l++) h = S(this, a[i + l], e, l), h === C && (h = this._$AH[l]), o ||= !H(h) || h !== this._$AH[l], h === p ? t = p : t !== p && (t += (h ?? "") + r[l + 1]), this._$AH[l] = h;
+      const l = t;
+      let a, h;
+      for (t = r[0], a = 0; a < r.length - 1; a++) h = S(this, l[i + a], e, a), h === C && (h = this._$AH[a]), o ||= !H(h) || h !== this._$AH[a], h === p ? t = p : t !== p && (t += (h ?? "") + r[a + 1]), this._$AH[a] = h;
     }
     o && !n && this.j(t);
   }
@@ -539,18 +539,18 @@ const He = { attribute: !0, type: String, converter: j, reflect: !1, hasChanged:
   let r = globalThis.litPropertyMetadata.get(n);
   if (r === void 0 && globalThis.litPropertyMetadata.set(n, r = /* @__PURE__ */ new Map()), i === "setter" && ((s = Object.create(s)).wrapped = !0), r.set(e.name, s), i === "accessor") {
     const { name: o } = e;
-    return { set(a) {
-      const l = t.get.call(this);
-      t.set.call(this, a), this.requestUpdate(o, l, s, !0, a);
-    }, init(a) {
-      return a !== void 0 && this.C(o, void 0, s, a), a;
+    return { set(l) {
+      const a = t.get.call(this);
+      t.set.call(this, l), this.requestUpdate(o, a, s, !0, l);
+    }, init(l) {
+      return l !== void 0 && this.C(o, void 0, s, l), l;
     } };
   }
   if (i === "setter") {
     const { name: o } = e;
-    return function(a) {
-      const l = this[o];
-      t.call(this, a), this.requestUpdate(o, l, s, !0, a);
+    return function(l) {
+      const a = this[o];
+      t.call(this, l), this.requestUpdate(o, a, s, !0, l);
     };
   }
   throw Error("Unsupported decorator location: " + i);
@@ -758,13 +758,13 @@ function rs(s, t) {
   return s.map((e) => Math.max(0, Math.min(255, Math.round(e * t))));
 }
 function os(s, t, e, i, n, r, o) {
-  const a = nt(s);
-  if (a === "low") return W(Ze);
-  if (a === "high") return W(Xe);
-  const l = i ? ae(e, n, r) : o, h = Math.max(0, Math.min(1, (t - 33) / 44)), d = oe(0.88, 1.1, h);
-  return W(rs(l, d));
+  const l = nt(s);
+  if (l === "low") return W(Ze);
+  if (l === "high") return W(Xe);
+  const a = i ? ae(e, n, r) : o, h = Math.max(0, Math.min(1, (t - 33) / 44)), d = oe(0.88, 1.1, h);
+  return W(rs(a, d));
 }
-const zt = 14, as = 100, Wt = it(8), ls = 8 * Wt.barW + 7 * Wt.gap;
+const zt = 20, as = 100, Wt = it(8), ls = 8 * Wt.barW + 7 * Wt.gap;
 function cs(s, t) {
   return t === "single-row" ? s : t === "two-row" ? Math.max(1, Math.ceil(s / 2)) : null;
 }
@@ -773,9 +773,9 @@ function jt(s, t, e) {
   let n = i ?? s;
   if (i === null && t > 0) {
     n = 1;
-    for (let a = s; a >= 1; a--) {
-      const l = it(a).gap;
-      if ((t - (a - 1) * l) / a >= zt) {
+    for (let l = 1; l <= s; l++) {
+      const a = Math.ceil(s / l), h = it(a).gap;
+      if ((t - (a - 1) * h) / a >= zt) {
         n = a;
         break;
       }
@@ -785,8 +785,8 @@ function jt(s, t, e) {
   const r = it(n);
   let o = r.barW;
   if (t > 0) {
-    const a = (t - (n - 1) * r.gap) / n;
-    o = Math.max(zt, Math.min(as, a));
+    const l = (t - (n - 1) * r.gap) / n;
+    o = Math.max(zt, Math.min(as, l));
   }
   return {
     ...r,
@@ -1103,7 +1103,7 @@ let M = class extends w {
           </div>
         </ha-card>
       `;
-    const s = this._config, t = !!this.hass.themes?.darkMode, e = this._themeTokens(t), i = this._cellVoltages(), n = i.length, r = this._num(s.soc_entity) ?? 0, o = s.gradient_enabled ?? !0, a = tt(s.soc_warm_color || ie), l = tt(s.soc_cool_color || ne), h = tt(s.flat_cell_color || re), d = s.layout_mode ?? "auto", c = jt(n, this._measuredWidth - rt, d), _ = c.rowWidth, { minIdx: g, maxIdx: v } = this._minMaxIdx(i), le = this._average(i), mt = i.map((u, m) => {
+    const s = this._config, t = !!this.hass.themes?.darkMode, e = this._themeTokens(t), i = this._cellVoltages(), n = i.length, r = this._num(s.soc_entity) ?? 0, o = s.gradient_enabled ?? !0, l = tt(s.soc_warm_color || ie), a = tt(s.soc_cool_color || ne), h = tt(s.flat_cell_color || re), d = s.layout_mode ?? "auto", c = jt(n, this._measuredWidth - rt, d), _ = c.rowWidth, { minIdx: g, maxIdx: v } = this._minMaxIdx(i), le = this._average(i), mt = i.map((u, m) => {
       const J = m === g, Q = m === v;
       return u === null ? {
         index: m,
@@ -1122,13 +1122,13 @@ let M = class extends w {
         voltage: u,
         voltageLabel: hs(u),
         heightPct: Math.max(0, Math.min(100, Ft(u))),
-        color: os(u, Ft(u), r, o, a, l, h),
+        color: os(u, Ft(u), r, o, l, a, h),
         badge: J ? "▼" : Q ? "▲" : "",
         badgeColor: J ? Ke : Q ? Je : "transparent",
         isMin: J,
         isMax: Q
       };
-    }), B = o ? ae(r, a, l) : h, K = W(B), U = this._alarmMessages(), ce = U.length > 0, N = i.filter((u) => u !== null), $t = this._num(s.pack_voltage_entity) ?? N.reduce((u, m) => u + m, 0), D = this._num(s.current_entity), bt = this._num(s.power_entity) ?? (D !== null ? D * $t : null), he = this._num(s.deviation_entity) ?? (N.length ? Math.max(...N) - Math.min(...N) : 0), yt = this._num(s.capacity_remaining_entity), xt = this._num(s.capacity_installed_entity), vt = this._num(s.cycles_entity), At = this._num(s.since_full_charge_entity), wt = this._state(s.temperature_entity), de = s.temperature_entity ? this.hass.states[s.temperature_entity]?.attributes?.unit_of_measurement ?? "" : "", T = this._state(s.charge_mode_entity), Ct = T && Ye.includes(T) ? ts[T] : "#9e9e9e", F = this._expandedDetail(mt, le);
+    }), B = o ? ae(r, l, a) : h, K = W(B), U = this._alarmMessages(), ce = U.length > 0, N = i.filter((u) => u !== null), $t = this._num(s.pack_voltage_entity) ?? N.reduce((u, m) => u + m, 0), D = this._num(s.current_entity), bt = this._num(s.power_entity) ?? (D !== null ? D * $t : null), he = this._num(s.deviation_entity) ?? (N.length ? Math.max(...N) - Math.min(...N) : 0), yt = this._num(s.capacity_remaining_entity), xt = this._num(s.capacity_installed_entity), vt = this._num(s.cycles_entity), At = this._num(s.since_full_charge_entity), wt = this._state(s.temperature_entity), de = s.temperature_entity ? this.hass.states[s.temperature_entity]?.attributes?.unit_of_measurement ?? "" : "", T = this._state(s.charge_mode_entity), Ct = T && Ye.includes(T) ? ts[T] : "#9e9e9e", F = this._expandedDetail(mt, le);
     return f`
       <ha-card
         style="background:${e.cardBg};color:${e.primaryText};box-shadow:${e.cardShadow};"
@@ -1313,10 +1313,10 @@ let M = class extends w {
     let e = -1, i = -1;
     const n = t.min_cell_id_entity ? this._num(t.min_cell_id_entity) : null, r = t.max_cell_id_entity ? this._num(t.max_cell_id_entity) : null;
     if (n !== null && n >= 1 && n <= s.length && (e = Math.round(n) - 1), r !== null && r >= 1 && r <= s.length && (i = Math.round(r) - 1), e === -1 || i === -1) {
-      let o = 1 / 0, a = -1 / 0, l = -1, h = -1;
+      let o = 1 / 0, l = -1 / 0, a = -1, h = -1;
       s.forEach((d, c) => {
-        d !== null && (d < o && (o = d, l = c), d > a && (a = d, h = c));
-      }), e === -1 && (e = l), i === -1 && (i = h);
+        d !== null && (d < o && (o = d, a = c), d > l && (l = d, h = c));
+      }), e === -1 && (e = a), i === -1 && (i = h);
     }
     return { minIdx: e, maxIdx: i };
   }
@@ -1344,8 +1344,8 @@ let M = class extends w {
     for (const n of this._config.alarm_entities ?? []) {
       const r = this._normalizeAlarm(n);
       if (this._isAlarmProblem(r)) {
-        const o = r.name ?? this._friendlyName(r.entity), a = this._state(r.entity);
-        s.push(`${o}${a ? `: ${a}` : ""}`);
+        const o = r.name ?? this._friendlyName(r.entity), l = this._state(r.entity);
+        s.push(`${o}${l ? `: ${l}` : ""}`);
       }
     }
     return s;

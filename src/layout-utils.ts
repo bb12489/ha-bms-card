@@ -1,7 +1,10 @@
 import { sizingFor, type CellSizing } from "./const";
 import type { LayoutMode } from "./types";
 
-const MIN_BAR_WIDTH = 14;
+// Never render a bar narrower than the design's own smallest reference bar
+// (the 16-per-row bucket) - below that it reads as too cramped, so auto mode
+// wraps to another row instead of squeezing further.
+const MIN_BAR_WIDTH = 20;
 const MAX_BAR_WIDTH = 100;
 
 // Width of the cell-bars row needed to show 8 cells in a single row at their
@@ -24,10 +27,12 @@ function forcedPerRow(totalCells: number, mode: LayoutMode): number | null {
 /**
  * Picks how many cells sit in a row and how wide their bars are, given the
  * actual measured width available to the cell area. In "auto" mode this
- * chooses the largest cells-per-row (fewest rows) whose bars stay at or
- * above a readable minimum, so the card reflows as it's resized instead of
- * being locked to a fixed pixel width. "single-row"/"two-row" force the row
- * count but still fit the bars to the available width.
+ * searches by row count (1, 2, 3, ...) rather than raw cells-per-row, so
+ * cells split evenly across rows (e.g. 16 cells -> 8+8, not a lopsided
+ * 14+2) - it picks the fewest rows whose even split keeps bars at or above
+ * a readable minimum, so the card reflows as it's resized instead of being
+ * locked to a fixed pixel width. "single-row"/"two-row" force the row count
+ * but still fit the bars to the available width.
  */
 export function computeCellLayout(totalCells: number, availableWidth: number, mode: LayoutMode): CellLayout {
   const forced = forcedPerRow(totalCells, mode);
@@ -35,7 +40,8 @@ export function computeCellLayout(totalCells: number, availableWidth: number, mo
 
   if (forced === null && availableWidth > 0) {
     perRow = 1;
-    for (let candidate = totalCells; candidate >= 1; candidate--) {
+    for (let rows = 1; rows <= totalCells; rows++) {
+      const candidate = Math.ceil(totalCells / rows);
       const gap = sizingFor(candidate).gap;
       const fitted = (availableWidth - (candidate - 1) * gap) / candidate;
       if (fitted >= MIN_BAR_WIDTH) {
