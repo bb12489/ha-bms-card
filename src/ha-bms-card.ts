@@ -1,6 +1,7 @@
 import { css, html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { fireEvent, type HomeAssistant, type LovelaceCardEditor } from "custom-card-helpers";
+import { ResizeController } from "@lit-labs/observers/resize-controller.js";
 import {
   CARD_NAME,
   CARD_TYPE,
@@ -48,9 +49,12 @@ export class HaBmsCard extends LitElement {
 
   @state() private _selectedCellIndex: number | null = null;
 
-  @state() private _measuredWidth = 0;
-
-  private _resizeObserver?: ResizeObserver;
+  // Same resize-tracking pattern Home Assistant's own cards use (e.g.
+  // hui-humidifier-card) - a Lit reactive controller wrapping ResizeObserver
+  // that triggers a re-render itself, instead of a hand-rolled observer.
+  private _resizeController = new ResizeController(this, {
+    callback: (entries) => entries[0]?.contentRect.width ?? 0,
+  });
 
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
     await import("./ha-bms-card-editor");
@@ -83,22 +87,8 @@ export class HaBmsCard extends LitElement {
     this._selectedCellIndex = null;
   }
 
-  public connectedCallback(): void {
-    super.connectedCallback();
-    if (!this._resizeObserver) {
-      this._resizeObserver = new ResizeObserver((entries) => {
-        const width = entries[0]?.contentRect.width ?? 0;
-        if (Math.abs(width - this._measuredWidth) > 0.5) {
-          this._measuredWidth = width;
-        }
-      });
-    }
-    this._resizeObserver.observe(this);
-  }
-
-  public disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this._resizeObserver?.disconnect();
+  private get _measuredWidth(): number {
+    return this._resizeController.value ?? 0;
   }
 
   public getCardSize(): number {
