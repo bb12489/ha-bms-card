@@ -9,16 +9,8 @@ Every value is a plain entity mapping in the card config, so it works with
 JK BMS, Victron, ESPHome, and others) — nothing is tied to one specific
 battery or BMS.
 
-![Battery Cell Card - dark theme](screenshots/01-card.png)
+![Battery Cell Card - dark theme](screenshots/ha-bms-card.png)
 
-<details>
-<summary>More screenshots (light theme, alarm state, 16-cell two-row)</summary>
-
-![Light theme](screenshots/02-light-theme.png)
-![Alarm state](screenshots/03-alarm-state.png)
-![16-cell two-row dark](screenshots/04-16cell-tworow-dark.png)
-
-</details>
 
 ## Features
 
@@ -33,8 +25,13 @@ battery or BMS.
 - Configurable alarm banner driven by whatever alarm/fault entities your BMS
   integration exposes
 - Single-row or two-row layouts for 4S–16S+ packs
-- Fully configured through the GUI editor — no YAML required, no entities
-  hardcoded
+- Fully configured through the GUI editor — no YAML required
+
+### Dynamic card gradient based on SoC
+
+![100%](screenshots/ha-bms-card-100.png)
+![50%](screenshots/ha-bms-card-50.png)
+![10%](screenshots/ha-bms-card-10.png)
 
 ## Installation
 
