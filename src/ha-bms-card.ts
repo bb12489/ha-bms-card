@@ -109,10 +109,16 @@ export class HaBmsCard extends LitElement {
     min_rows: number;
   } {
     const cellCount = this._config?.cell_entities?.length ?? 8;
-    let rows = 5 + (cellCount > 8 ? 1 : 0);
-    if (this._alarmMessages().length) rows += 1;
-    if (this._selectedCellIndex !== null) rows += 1;
-    return { columns: 12, rows, min_columns: 4, min_rows: 3 };
+    const extraRows = (cellCount > 8 ? 1 : 0) + (this._alarmMessages().length ? 1 : 0) + (this._selectedCellIndex !== null ? 1 : 0);
+    // min_rows has to be a real floor, not just a smaller preferred size:
+    // the cell bars can shrink down to a few px to make room, but the fixed
+    // rows (header, badges, stats grid, ...) can't shrink below their own
+    // content, so min_rows must stay high enough that those never get
+    // clipped even with the bars at their minimum. Verified empirically
+    // against Home Assistant's actual sections-grid row height (56px + 8px
+    // gap): 4 rows is the floor for the base case, matching the same
+    // per-condition bumps as the preferred `rows` size above.
+    return { columns: 12, rows: 5 + extraRows, min_columns: 4, min_rows: 4 + extraRows };
   }
 
   static styles = css`
@@ -130,11 +136,12 @@ export class HaBmsCard extends LitElement {
     }
     ha-card {
       border-radius: 12px;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
       font-family: "Roboto", sans-serif;
       height: 100%;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
     .header {
       display: flex;
@@ -215,12 +222,21 @@ export class HaBmsCard extends LitElement {
       display: flex;
       justify-content: center;
       padding: 4px 16px 6px;
+      box-sizing: border-box;
+      /* Fixed-size siblings (header, badges, stats, ...) keep their natural
+         height; this is the one flexible row that grows or shrinks to
+         absorb whatever vertical space the card is actually given, so
+         resizing the card's height never clips anything else - the bars
+         themselves get taller/shorter instead (see .cell-track). */
+      flex: 1 1 0;
+      min-height: 0;
     }
     .cells-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       flex-shrink: 0;
+      min-height: 0;
     }
     .cell {
       display: flex;
@@ -228,19 +244,24 @@ export class HaBmsCard extends LitElement {
       align-items: center;
       gap: 4px;
       cursor: pointer;
+      min-height: 0;
     }
     .cell-voltage {
       font-family: ui-monospace, Menlo, monospace;
       font-weight: 600;
+      flex: none;
     }
     .cell-badge {
       line-height: 1;
+      flex: none;
     }
     .cell-track {
       border-radius: 6px;
       position: relative;
       overflow: hidden;
       box-sizing: border-box;
+      flex: 1 1 0;
+      min-height: 4px;
     }
     .cell-fill {
       position: absolute;
@@ -471,7 +492,7 @@ export class HaBmsCard extends LitElement {
                   </div>
                   <div
                     class="cell-track"
-                    style="width:${sizing.barW}px;height:${sizing.barH}px;background:${theme.barTrackBg};border:${
+                    style="width:${sizing.barW}px;background:${theme.barTrackBg};border:${
                       this._selectedCellIndex === c.index
                         ? `2px solid ${SELECTED_CELL_BORDER_HEX}`
                         : `1px solid ${theme.barTrackBorder}`
