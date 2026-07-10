@@ -16,6 +16,7 @@ const SCHEMA = [
   { name: "name", selector: { text: {} } },
   {
     type: "expandable",
+    flatten: true,
     name: "cells",
     title: "Cell voltages",
     expanded: true,
@@ -32,6 +33,7 @@ const SCHEMA = [
   },
   {
     type: "expandable",
+    flatten: true,
     name: "pack",
     title: "Pack state",
     expanded: true,
@@ -45,6 +47,7 @@ const SCHEMA = [
   },
   {
     type: "expandable",
+    flatten: true,
     name: "health",
     title: "Capacity & health",
     schema: [
@@ -57,6 +60,7 @@ const SCHEMA = [
   },
   {
     type: "expandable",
+    flatten: true,
     name: "alarms",
     title: "Alarms & status",
     schema: [
@@ -68,6 +72,7 @@ const SCHEMA = [
   },
   {
     type: "expandable",
+    flatten: true,
     name: "layout",
     title: "Layout",
     schema: [
