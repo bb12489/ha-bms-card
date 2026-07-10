@@ -119,11 +119,22 @@ export class HaBmsCard extends LitElement {
     :host {
       display: block;
       min-width: ${MIN_CELLS_ROW_WIDTH + CELLS_WRAP_HORIZONTAL_PADDING}px;
+      /* Grid/flex items default to min-height: auto, which floors them at
+         their content's natural height and blocks shrinking below it -
+         the same class of bug as .cells-row needing flex-shrink: 0. This
+         lets Home Assistant's sections view actually shrink the card when
+         its row-height resize handle is dragged smaller. */
+      min-height: 0;
+      height: 100%;
+      box-sizing: border-box;
     }
     ha-card {
       border-radius: 12px;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       font-family: "Roboto", sans-serif;
+      height: 100%;
+      box-sizing: border-box;
     }
     .header {
       display: flex;
@@ -375,12 +386,13 @@ export class HaBmsCard extends LitElement {
       : "";
 
     const chargeModeState = this._state(cfg.charge_mode_entity);
-    // Match case-insensitively - BMS integrations commonly report the mode
-    // as lowercase ("bulk"/"absorption"/"float") rather than the design's
-    // capitalized labels, and an exact-case match would silently fall back
-    // to the neutral gray color for those.
+    // Match case-insensitively AND as a substring - BMS integrations report
+    // this in all sorts of shapes ("bulk", "Bulk Charging", "Float | Linear",
+    // "3: Absorption", ...), not just the design's exact capitalized labels,
+    // and an exact match would silently fall back to the neutral gray color
+    // for any of those.
     const chargeModeCanonical = chargeModeState
-      ? CHARGE_MODES.find((mode) => mode.toLowerCase() === chargeModeState.toLowerCase())
+      ? CHARGE_MODES.find((mode) => chargeModeState.toLowerCase().includes(mode.toLowerCase()))
       : undefined;
     const chargeModeColor = chargeModeCanonical ? CHARGE_MODE_COLOR[chargeModeCanonical] : "#9e9e9e";
     const chargeModeLabel = chargeModeCanonical ?? chargeModeState;

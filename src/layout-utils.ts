@@ -7,11 +7,14 @@ import type { LayoutMode } from "./types";
 const MIN_BAR_WIDTH = 20;
 const MAX_BAR_WIDTH = 100;
 
-// Width of the cell-bars row needed to show 8 cells in a single row at their
-// reference size - the card is given a CSS min-width based on this so it
-// never has to shrink bars below a readable size (and never needs to scroll).
-const EIGHT_CELL_SIZING = sizingFor(8);
-export const MIN_CELLS_ROW_WIDTH = 8 * EIGHT_CELL_SIZING.barW + 7 * EIGHT_CELL_SIZING.gap;
+// The card's CSS min-width is based on this: the width needed to show 4
+// cells in a single row at the minimum readable bar width. That's the
+// narrowest point at which *any* row arrangement is still acceptable, and
+// caps auto mode's rows at ~4 cells each - so e.g. an 8-cell pack can
+// reflow down to two rows of 4 as the card narrows, instead of being locked
+// into a single row of 8 (or needing a scrollbar) the whole time.
+const FOUR_CELL_GAP = sizingFor(4).gap;
+export const MIN_CELLS_ROW_WIDTH = 4 * MIN_BAR_WIDTH + 3 * FOUR_CELL_GAP;
 
 export interface CellLayout extends CellSizing {
   perRow: number;
